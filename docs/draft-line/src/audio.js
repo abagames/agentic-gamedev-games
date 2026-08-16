@@ -177,7 +177,7 @@ export class Sound {
 
     this.windBand = ctx.createBiquadFilter();  // the "rush": bright, gated by draft
     this.windBand.type = 'lowpass';
-    this.windBand.frequency.setValueAtTime(6000, t);
+    this.windBand.frequency.setValueAtTime(5000, t);
     this.windBand.Q.setValueAtTime(0.9, t);
     this.windGain = ctx.createGain(); this.windGain.gain.setValueAtTime(0, t);
 
@@ -325,12 +325,13 @@ export class Sound {
     const sp = this._engine.speed01;
     const TAU = 0.10; // deliberately slow: the silence "arrives"
 
-    // rush amplitude collapses superlinearly as the tow deepens
+    // Clean air tops out at 0.03375 gain; the rush then collapses superlinearly as the
+    // tow deepens so the pitched engine reads above it without losing the draft contrast.
     const gate = Math.pow(1 - d, 1.9);
-    const rush = ((0.030 + 0.155 * Math.pow(sp, 1.3)) * gate + this._windBase) * on;
+    const rush = ((0.00625 + 0.0275 * Math.pow(sp, 1.3)) * gate + this._windBase) * on;
     this.windGain.gain.setTargetAtTime(rush, t, TAU);
-    // and it gets muffled on the way down: 6.5k -> 380 Hz
-    this.windBand.frequency.setTargetAtTime(500 + 6000 * gate, t, TAU);
+    // and it gets muffled on the way down: 5k clean-air ceiling -> 500 Hz deep-draft floor
+    this.windBand.frequency.setTargetAtTime(500 + 4500 * gate, t, TAU);
 
     // the reward: a low, close, muffled boom that only exists deep in the tow
     const boom = (0.012 + 0.085 * Math.pow(sp, 1.2)) * Math.pow(d, 1.4) * on;

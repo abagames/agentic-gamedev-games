@@ -171,6 +171,58 @@ test('consecutive startRun calls have the same postcondition and stop audio each
   assert.equal(calls.filter(([kind]) => kind === 'stopAll').length, 2);
 });
 
+function windState(speed01, draft) {
+  const trackedParam = () => ({
+    target: NaN,
+    setTargetAtTime(value) { this.target = value; },
+  });
+  const sound = new Sound();
+  sound.ctx = { currentTime: 0 };
+  sound.ready = true;
+  sound._engineOn = true;
+  sound._engine = { speed01, boosting: false };
+  sound._draft = draft;
+  sound.windGain = { gain: trackedParam() };
+  sound.windBand = { frequency: trackedParam() };
+  sound.boomGain = { gain: trackedParam() };
+  sound.boomBand = { frequency: trackedParam() };
+  sound._applyWind();
+  return {
+    rush: sound.windGain.gain.target,
+    windCutoff: sound.windBand.frequency.target,
+    boom: sound.boomGain.gain.target,
+    boomCutoff: sound.boomBand.frequency.target,
+  };
+}
+
+test('wind contract halves the bright rush and keeps the deep-draft boom contrast', () => {
+  const near = (actual, expected) => assert.ok(Math.abs(actual - expected) < 1e-12,
+    `expected ${expected}, got ${actual}`);
+  const idle = windState(0, 0);
+  near(idle.rush, 0.00625);
+  near(idle.windCutoff, 5000);
+  near(idle.boom, 0);
+
+  const clean = windState(1, 0);
+  near(clean.rush, 0.03375);
+  near(clean.windCutoff, 5000);
+  near(clean.boom, 0);
+
+  const partialGate = Math.pow(0.5, 1.9);
+  const partial = windState(1, 0.5);
+  near(partial.rush, 0.03375 * partialGate);
+  near(partial.windCutoff, 500 + 4500 * partialGate);
+  near(partial.boom, 0.097 * Math.pow(0.5, 1.4));
+  near(partial.boomCutoff, 130);
+  assert.ok(partial.rush < clean.rush * 0.27, 'partial draft must strongly suppress the rush');
+
+  const deep = windState(1, 1);
+  near(deep.rush, 0);
+  near(deep.windCutoff, 500);
+  near(deep.boom, 0.097);
+  near(deep.boomCutoff, 165);
+});
+
 function measure(program) {
   const steps = [];
   const param = { value: 0, cancelScheduledValues: noop, setValueAtTime: noop,
