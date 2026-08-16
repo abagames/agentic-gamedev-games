@@ -1,0 +1,21 @@
+{
+  "name": "draft-line",
+  "version": "1.0.0",
+  "description": "DRAFT LINE - a 1985-style pseudo-3D arcade racer built on the slipstream",
+  "main": "index.js",
+  "directories": {
+    "test": "test"
+  },
+  "scripts": {
+    "test": "node test/sim.test.mjs && node test/chain.test.mjs && node test/overtake-pan.test.mjs && node test/name-entry.test.mjs && node test/attract.test.mjs && node test/render-order.test.mjs && node test/checkpoint-display.test.mjs && node test/ready-overlay.test.mjs && node test/high-score.test.mjs && node test/focus-lifecycle.test.mjs && node test/audio-lifecycle.test.mjs",
+    "smoke": "node test/smoke.mjs",
+    "probe:initials": "node test/name-entry.probe.mjs"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "module",
+  "devDependencies": {
+    "playwright": "^1.62.1"
+  }
+}

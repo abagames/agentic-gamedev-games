@@ -1,0 +1,7 @@
+# Generated diagnostic captures
+/test/screenshot-*.png
+/test/*.webm
+/test/*.mp4
+
+# Local experiments and generated scratch files
+/scratchpad/

@@ -1,0 +1,46 @@
+# Dependencies
+node_modules/
+
+# Package-manager logs and state
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+.npm/
+.yarn/cache/
+.yarn/unplugged/
+.pnpm-store/
+
+# Test and coverage output
+coverage/
+.nyc_output/
+
+# Build output and tool caches
+dist/
+build/
+out/
+.cache/
+.parcel-cache/
+.vite/
+.eslintcache
+*.tsbuildinfo
+
+# Local environment files (keep a shareable template)
+.env
+.env.*
+!.env.example
+
+# Local tool settings and transient state
+.agents/
+.claude/
+.codex/
+.vscode/
+
+# Editor and OS temporary files
+.idea/
+*.swp
+*.swo
+*~
+.DS_Store
+Thumbs.db
+Desktop.ini

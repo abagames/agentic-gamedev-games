@@ -1,0 +1,26 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>DRAFT LINE</title>
+<style>
+  html, body {
+    margin: 0; height: 100%;
+    background: #06060a;
+    display: flex; align-items: center; justify-content: center;
+    overflow: hidden;
+  }
+  canvas {
+    image-rendering: pixelated;
+    image-rendering: crisp-edges;
+    display: block;
+    box-shadow: 0 0 0 2px #1a1a24, 0 0 40px #000;
+  }
+</style>
+</head>
+<body>
+  <canvas id="screen" width="320" height="224"></canvas>
+  <script type="module" src="./src/main.js"></script>
+</body>
+</html>
