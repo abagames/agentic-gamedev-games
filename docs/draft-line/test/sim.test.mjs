@@ -75,13 +75,20 @@ const DT = 1 / 60;
   ok('sitting deep in the tow fills the gauge faster than loafing at its back edge',
     deepIn < backEdge * 0.75, `deep=${deepIn.toFixed(2)}s backEdge=${backEdge.toFixed(2)}s`);
 }
+// The shallow tow no longer fills the gauge: it fills it to CHARGE_SHALLOW_CAP and stops,
+// so that a FULL gauge is proof of a deep tick (see spec CHARGE_SHALLOW_CAP). Was: "fills
+// the gauge in ~12.5 s" (CHARGE_MAX / SHALLOW.charge); now: reaches the cap in ~10.0 s
+// (CHARGE_SHALLOW_CAP / SHALLOW.charge) and never goes past it however long it holds.
 {
   const sim = new Sim(stubCourse(), 1);
   sim.speed = S.VMAX;
   let t = 0;
-  while (sim.charge < S.CHARGE_MAX && t < 30) { pinRivals(sim, 4.0); sim.step(DT, { steer: 0, throttle: 1, boost: false }); t += DT; }
-  const shallowFill = S.CHARGE_MAX / S.SHALLOW.charge;
-  ok(`shallow zone fills the gauge in ~${shallowFill.toFixed(1)} s`, near(t, shallowFill, 0.4), `t=${t.toFixed(2)}s`);
+  while (sim.charge < S.CHARGE_SHALLOW_CAP && t < 30) { pinRivals(sim, 4.0); sim.step(DT, { steer: 0, throttle: 1, boost: false }); t += DT; }
+  const shallowFill = S.CHARGE_SHALLOW_CAP / S.SHALLOW.charge;
+  ok(`shallow zone fills the gauge to the cap in ~${shallowFill.toFixed(1)} s`, near(t, shallowFill, 0.4), `t=${t.toFixed(2)}s`);
+  for (let i = 0; i < 600; i++) { pinRivals(sim, 4.0); sim.step(DT, { steer: 0, throttle: 1, boost: false }); }
+  ok('and holding the shallow tow for another 10 s does not push it past the cap',
+    sim.charge === S.CHARGE_SHALLOW_CAP, `charge=${sim.charge.toFixed(2)}`);
 }
 
 // ---------------------------------------------------------------- 2. mashing is strictly worse
@@ -1828,7 +1835,15 @@ function runStrategy(mode, seconds) {
   // it judges itself close enough, and fires the gauge at a threshold. Steering is the bot's
   // (P6 is not about steering). `pin` forces the throttle open forever — the control.
   const DZ_AIM = S.DEEP.dzMin + 0.5 * (S.DEEP.dzMax - S.DEEP.dzMin);
-  const hands = ({ reaction = 0.20, quantum = 0.12, fireAt = 0.95, pin = null } = {}) => {
+  // fireAt: the gauge level this pair of hands waits for before pressing. It used to be
+  // 0.95 — "near enough to full for a human eye" — which was fair while ANY deep release
+  // slingshotted. A slingshot now requires a FULL gauge (Sim#slingReady), and the HUD says
+  // so directly: the bar blinks white exactly while a press would slingshot, and it holds
+  // at CHARGE_MAX for as long as the tow is held, so waiting for the blink costs a real
+  // player nothing. The 0.20 s reaction and 0.12 s decision quantum on the STEERING stay,
+  // because those model a thing the player cannot see coming; the release cue is now
+  // something they can. The 0.95 hands are kept as an explicit contrast case below.
+  const hands = ({ reaction = 0.20, quantum = 0.12, fireAt = 1.0, pin = null } = {}) => {
     const steerBot = makeDriver({ useTow: true, release: 'none' });
     const hist = [];
     const used = new Set();
@@ -1889,6 +1904,15 @@ function runStrategy(mode, seconds) {
     med(kmh) >= 420 && kmh.filter((v) => v >= 420).length >= SEEDS.length * 0.75,
     `median peak ${med(kmh).toFixed(0)} km/h, ${kmh.filter((v) => v >= 420).length}/${SEEDS.length} seeds >= 420 `
     + `(deep cap alone is ${(S.DEEP_CAP * 3.6).toFixed(0)} km/h)`);
+
+  // The cost of the full-gauge rule, stated rather than hidden: the same hands firing at
+  // 95% get an ordinary boost (no 1.4x duration/gain, no chain) and fall short of the same
+  // number. This is the intended trade — the white blink is the whole instruction — but it
+  // is a real loss, so it is asserted instead of left to be rediscovered.
+  const early = SEEDS.map((s) => drive1(hands({ fireAt: 0.95 }), s).kmh);
+  ok('firing at 95% is measurably slower than waiting for the blink',
+    med(early) < med(kmh) - 15,
+    `95%: median ${med(early).toFixed(0)} km/h vs 100%: ${med(kmh).toFixed(0)} km/h`);
 
   const gauges = rs.map((r) => r.gauge);
   ok('a pair of HANDS can fill the slingshot gauge',

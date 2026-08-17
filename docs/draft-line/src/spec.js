@@ -329,6 +329,26 @@ export const SHALLOW = {
 };
 export const CHARGE_DRAIN = 6;      // per second when outside any zone
 export const CHARGE_MAX = 100;
+// CHARGE_SHALLOW_CAP: the shallow tow can only fill the gauge to here. THE defect this
+// fixes: a full gauge used to be reachable without ever having earned a deep tick, so
+// "gauge full" and "a release would slingshot" were different facts, and the HUD had to
+// grow a third, dulled state to say "full, but not really". With the cap, charge ==
+// CHARGE_MAX implies deep (or its coyote window) BY CONSTRUCTION, and the gauge is back to
+// two honest states: blue while filling, gold + white blink when the slingshot is live —
+// and "live" excludes the time a boost is already running, since the button does nothing
+// there.
+// Sitting in the shallow tow is still worth doing — it is most of the gauge — but the last
+// 20% is only ever bought on a rival's bumper.
+export const CHARGE_SHALLOW_CAP = 80;
+// CHARGE_EXCESS_DRAIN: rate at which charge above CHARGE_SHALLOW_CAP is given back once
+// the car settles into the shallow band (and the coyote window has closed). Clamped AT the
+// cap, never below — dropping out of the deep band must not also cost the shallow charge
+// you would have had anyway. 60/s takes the full 100 -> 80 in 0.33 s: fast enough that the
+// loss reads as an immediate consequence of leaving the bumper rather than as a slow leak
+// (CHARGE_DRAIN's 6/s would take 3.3 s and would be invisible in peripheral vision while
+// the player is watching the road), and slow enough to still be ~20 animation frames of
+// visibly shrinking bar rather than a single-frame snap the eye cannot catch.
+export const CHARGE_EXCESS_DRAIN = 60;
 
 // boost: consumes ALL charge. Superlinear so that mashing is strictly worse.
 export const BOOST = {
@@ -351,7 +371,8 @@ export const BOOST = {
   // a full gauge pays, which is the direction the dash wanted to go anyway. Spam is now
   // beaten by the shape of the curve rather than by an arbitrary threshold.
   baseGain: 0.01, gainPerCharge2: 0.36, gainExp: 3,   // * VMAX
-  slingDur: 1.4, slingGain: 1.4,          // multipliers when released inside DEEP
+  slingDur: 1.4, slingGain: 1.4,          // multipliers for a FULL gauge released inside
+                                          // DEEP (or its coyote window); see Sim#slingReady
   assistTime: 0.25, assistSteer: 1.25,    // exit assist, held for the whole boost + this
   // ---- anti-spam --------------------------------------------------------------
   // A proximity-weighted 95/s fills the gauge in ~1.1 s on the bumper, which is what makes
@@ -362,12 +383,27 @@ export const BOOST = {
   // minCharge: below this the button does nothing at all. A slingshot is a thing you have,
   // not a thing you dribble — dumping a quarter-full gauge is no longer a (bad) move, it
   // is not a move. Costs a competent player nothing: they release at 100.
+  // Between minCharge and CHARGE_MAX a release is legal but is an ORDINARY boost, even in
+  // the deep band: the 1.4x multipliers and the chain session belong to a full gauge only
+  // (Sim#slingReady). A partial release therefore stays legal-but-worse, which is the whole
+  // point of this threshold, and the white blink now means exactly "a press right now
+  // slingshots" rather than "a press right now might" — including while a boost is still
+  // running, where the gauge can refill but the button is inert, so the bar stays blue and
+  // the ready cue waits for the boost to end.
   minCharge: 25,
   // rearm: the gauge cannot start refilling for this long after a release. Physically it
   // is the tow you just blew out of; mechanically it puts a floor under the cycle time
   // that no amount of button-pressing can beat. Free for a real player, who spends ~47% of
   // every cycle repositioning for the next tow anyway.
   rearm: 0.6,
+  // slingGrace: coyote time for the slingshot. The deep band is a moving, narrow box on a
+  // rival's bumper, so the exact tick you leave it is not something the player can see or
+  // time — and losing the 1.4x multipliers to a frame of jitter reads as the button
+  // ignoring you rather than as a mistake. Within this long after the last deep tick, a
+  // release still counts as a slingshot (if the gauge is full). Kept short so the skill
+  // axis survives: shallow charging alone never earns it, and you still have to have
+  // EARNED a deep tick.
+  slingGrace: 0.25,
   // ---- the punch -------------------------------------------------------------
   // THE defect this block fixes: the boost raised the speed CAP correctly, but the only
   // thing that ever moved the car toward that cap was ACCEL (34 m/s^2, and 28.9 at the
@@ -945,6 +981,10 @@ export const PAL = {
   lane: '#d8d8e0',
   hudBg: '#000000', hudText: '#e8e8f0', hudDim: '#7a7a8c',
   timeWarn: '#ff4040', chargeLow: '#3c78d8', chargeHigh: '#ffd76b',
+  // There is deliberately no third, dulled gold here. It existed for "gauge full but a
+  // release would not slingshot", which CHARGE_SHALLOW_CAP made unreachable: charge can
+  // only reach CHARGE_MAX while deep or inside the coyote window (proved by the reachability
+  // searches in test/shallow-cap.test.mjs), so full always means live. Two states.
   gate: '#e0e0e8', gateGlow: '#ffd76b',
   // ---- car classes ------------------------------------------------------------------
   // Three roles, three hues, no two of them adjacent. THE defect this fixes: the player's
@@ -998,7 +1038,7 @@ export const READY_OVERLAY = Object.freeze({
   ready: Object.freeze({ y: 88, scale: 4, colorRole: 'hudText' }),
   countdown: Object.freeze({ y: 118, scale: 5, colorRole: 'chargeHigh' }),
   instruction: Object.freeze({
-    text: 'HOLD TOW   ACTION RELEASE', y: 150, scale: 1, colorRole: 'hudText',
+    text: 'HOLD TOW   PRESS BOOST', y: 150, scale: 1, colorRole: 'hudText',
     plateRole: 'hudBg', plateAlpha: 0.72, padX: 6, padY: 5,
   }),
 });

@@ -2,6 +2,8 @@
 import assert from 'node:assert/strict';
 import { readFileSync } from 'node:fs';
 import { ACTION_CODES, ATTRACT_CONTROLS, ATTRACT_VIEW, Game } from '../src/game.js';
+import { textWidth } from '../src/font.js';
+import * as S from '../src/spec.js';
 
 const noop = () => {};
 const ctx = new Proxy({ fillStyle: '#000', globalAlpha: 1 }, {
@@ -122,7 +124,7 @@ test('title guidance names the actual accelerator and brake aliases', () => {
   const result = game();
   assert.match(ATTRACT_CONTROLS[0], /UP\/W ACCEL/);
   assert.match(ATTRACT_CONTROLS[0], /DOWN\/S BRAKE/);
-  assert.match(ATTRACT_CONTROLS.join(' '), /ACTION Z\/X\/J\/K\/SPACE/);
+  assert.match(ATTRACT_CONTROLS.join(' '), /BOOST Z\/X\/J\/K\/SPACE/);
   const throttle = (keys) => { result.keys = new Set(keys); return result._playerInput().throttle; };
   assert.equal(throttle(['ArrowUp']), 1);
   assert.equal(throttle(['KeyW']), 1);
@@ -153,6 +155,40 @@ test('initial and post-game attract entry both stop every audio source', () => {
   calls.length = 0;
   result._enterAttract();
   assert.deepEqual(calls, [['stopAll']]);
+});
+
+test('prompt and control strings say BOOST and fit inside the view width', () => {
+  // The on-screen wording is BOOST, never the internal ACTION identifier, and never the
+  // misleading "RELEASE" (the button is press-to-fire).
+  const screenStrings = [
+    ...ATTRACT_CONTROLS,
+    'PRESS BOOST BUTTON TO START',
+    'PRESS BOOST',
+    'BOOST ENTER AT RIGHT',
+    S.READY_OVERLAY.instruction.text,
+  ];
+  for (const text of screenStrings) {
+    assert.ok(!/ACTION/.test(text), `on-screen text must not expose ACTION: ${text}`);
+    assert.ok(!/RELEASE/.test(text), `on-screen text must not say RELEASE: ${text}`);
+  }
+  // Widest drawn instance of each string: the title prompt is drawn at scale 2.
+  const drawn = [
+    ['PRESS BOOST BUTTON TO START', 2],
+    ['PRESS BOOST', 1],
+    ['BOOST ENTER AT RIGHT', 1],
+    [S.READY_OVERLAY.instruction.text, S.READY_OVERLAY.instruction.scale],
+    ...ATTRACT_CONTROLS.map((t) => [t, 1]),
+  ];
+  for (const [text, scale] of drawn) {
+    const w = textWidth(text, scale);
+    assert.ok(w <= S.VIEW_W, `"${text}" at scale ${scale} is ${w}px, wider than ${S.VIEW_W}`);
+    // Centred text must also start on-screen.
+    assert.ok(Math.round(S.VIEW_W / 2 - w / 2) >= 0, `"${text}" would be centred off-screen`);
+  }
+  // The READY plate around the instruction must fit too.
+  const plateW = textWidth(S.READY_OVERLAY.instruction.text, S.READY_OVERLAY.instruction.scale)
+    + S.READY_OVERLAY.instruction.padX * 2;
+  assert.ok(plateW <= S.VIEW_W, `READY instruction plate is ${plateW}px`);
 });
 
 console.log(`\n${passed} passed, 0 failed`);

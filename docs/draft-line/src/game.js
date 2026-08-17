@@ -67,8 +67,8 @@ function isCanonicalHi(value, canonical) {
 export const ATTRACT_VIEW = Object.freeze({ titleS: 9, rankingS: 7, fadeS: 0.6 });
 export const ATTRACT_CONTROLS = Object.freeze([
   'UP/W ACCEL   DOWN/S BRAKE',
-  'STEER LEFT/RIGHT   ACTION RELEASE',
-  'ACTION Z/X/J/K/SPACE   M MUTE',
+  'STEER LEFT/RIGHT',
+  'BOOST Z/X/J/K/SPACE   M MUTE',
 ]);
 
 export class Game {
@@ -514,7 +514,11 @@ export class Game {
   _reactTo(ev, { silent = false } = {}) {
     if (ev.bump) { if (!silent) this.sound.sfx('bump'); this.shake = 0.35; }
     if (ev.spin) { if (!silent) this.sound.sfx('spin'); this.shake = 1.0; }
-    if (ev.chargeFull && !silent) this.sound.sfx('chargeFull');
+    // The "ready" ping means the slingshot is LIVE, not merely that the bar filled. It
+    // used to fire on ev.chargeFull, which is charge level alone — so it also went off
+    // while shallow-drafting or after the coyote window closed, promising a 1.4x release
+    // the sim would have refused. ev.slingReady is the sim's own edge on that promise.
+    if (ev.slingReady && !silent) this.sound.sfx('chargeFull');
     if (ev.release) {
       if (!silent) this.sound.sfx('release');
       this.releaseFlash = 0.4;
@@ -633,21 +637,23 @@ export class Game {
 
     if (this._boostPunch > 0.02) this._drawSpeedLines(ctx, this._boostPunch);
 
-    // Checkpoint gate: the whole run is measured against this thing, so it must be
-    // visible as early as the draw distance allows.
-    const cp = this.course.checkpoints[s.leg - 1];
-    if (cp) this._drawGate(cp.z, s.leg >= S.TOTAL_LEGS);
-
     this._drawScrub(ctx);   // P1: on the tarmac, under every car
 
-    // Roadside props and cars share one depth queue. A fixed "props then cars" layer made
-    // a far car paint over a nearer building; the common world-z key restores painter's
-    // order while leaving the player, gates, road and HUD in their deliberate own layers.
+    // Roadside props, cars AND the checkpoint gate share one depth queue. A fixed
+    // "props then cars" layer made a far car paint over a nearer building; the gate used
+    // to be drawn in a pre-pass of its own, which made every tree, pylon and rival BEYOND
+    // it paint straight over its CHECK/FINISH board. The common world-z key restores
+    // painter's order for all three, leaving only the player, road and HUD in their
+    // deliberate own layers (the player is always nearest the camera, so it stays on top).
     const sprites = r.visibleProps(this.course).map((p) => ({
       z: p.z, x: p.x, category: 'prop', kind: p.kind, o: p,
     }));
     for (const c of s.traffic) sprites.push({ z: c.z, x: c.x, category: 'car', kind: 'traffic', o: c });
     for (const c of s.rivals) sprites.push({ z: c.z, x: c.x, category: 'car', kind: 'rival', o: c });
+    // The gate spans the road, so its queue x is the road centre; x is only a tie-break
+    // for genuinely coincident depths and never moves the drawn posts.
+    const cp = this.course.checkpoints[s.leg - 1];
+    if (cp) sprites.push({ z: cp.z, x: 0, category: 'gate', kind: 'gate', isFinish: s.leg >= S.TOTAL_LEGS });
     // Crest occlusion is a CLIP, not a cull. A car on the far side of a brow must show its
     // roof above the ridge and hide its wheels behind it — the genre's whole read for
     // "there is something over that rise". Culling on pr.visible made a car pop out of
@@ -656,7 +662,8 @@ export class Game {
     // row the road was rasterised with, so the car emerges roof-first and stays welded to
     // the road surface instead of floating.
     for (const p of sortWorldSprites(sprites)) {
-      if (p.category === 'prop') r.drawProp(p.o);
+      if (p.category === 'gate') this._drawGate(p.z, p.isFinish);
+      else if (p.category === 'prop') r.drawProp(p.o);
       else {
         r.drawSprite(p.z, p.x, (c, sx, sy, scale) => {
           this._drawCar(c, { sx, sy, scale }, p.kind, p.o);
@@ -1045,7 +1052,18 @@ export class Game {
     // dark "row of tiles" above SCORE/TIME/HI — it is a bezel-height bar with tick marks
     // every 32px, not a leftover; it reads as plain dark tiles only when charge is empty
     // (attract / just after a reset), and fills blue -> gold as charge rises.
-    const full = s.charge >= S.CHARGE_MAX;
+    //
+    // TWO states, not three. The bar is gold + blinking white exactly when a press would
+    // slingshot, and blue otherwise. This is honest only because of CHARGE_SHALLOW_CAP:
+    // the shallow tow stops at 80%, so a FULL bar can only have been bought on a bumper
+    // and `full` already implies `slingReady` (test/shallow-cap.test.mjs searches for a
+    // counterexample). An interim version drew a third, dulled gold for "full but not
+    // live"; that state no longer exists, and re-deriving the blink from charge level
+    // alone — rather than from the sim's own slingReady — is what made it necessary.
+    // Reading slingReady also means the bar goes quiet for the whole of a running boost:
+    // the gauge can refill to 100% mid-slingshot, and blinking there advertised a press
+    // _release would have thrown away (see Sim#slingReady).
+    const full = s.charge >= S.CHARGE_MAX && s.slingReady;
     const cw = Math.round((s.charge / S.CHARGE_MAX) * S.VIEW_W);
     ctx.fillStyle = '#1a1a24';
     ctx.fillRect(0, 0, S.VIEW_W, S.CELL);
@@ -1188,7 +1206,7 @@ export class Game {
       drawTextCentered(ctx, 'TUCK IN. CHARGE. SLINGSHOT.', S.VIEW_W / 2, 100, 1, P.hudText);
       drawTextCentered(ctx, `${S.TOTAL_LEGS} CHECKPOINTS TO THE COAST`, S.VIEW_W / 2, 110, 1, P.hudDim);
       if (Math.floor(this.t * 2) % 2 === 0) {
-        drawTextCentered(ctx, 'PRESS ACTION TO START', S.VIEW_W / 2, 138, 2, P.hudText);
+        drawTextCentered(ctx, 'PRESS BOOST BUTTON TO START', S.VIEW_W / 2, 138, 2, P.hudText);
       }
       drawTextCentered(ctx, ATTRACT_CONTROLS[0], S.VIEW_W / 2, 166, 1, P.hudDim);
       drawTextCentered(ctx, ATTRACT_CONTROLS[1], S.VIEW_W / 2, 174, 1, P.hudDim);
@@ -1201,7 +1219,7 @@ export class Game {
           S.VIEW_W / 2, 78 + index * 16, 2, P.hudText);
       });
       if (Math.floor(this.t * 2) % 2 === 0) {
-        drawTextCentered(ctx, 'PRESS ACTION TO START', S.VIEW_W / 2, 170, 1, P.hudDim);
+        drawTextCentered(ctx, 'PRESS BOOST BUTTON TO START', S.VIEW_W / 2, 170, 1, P.hudDim);
       }
     }
     ctx.globalAlpha = 1;
@@ -1254,7 +1272,7 @@ export class Game {
     }
     if (m > 8) drawTextCentered(ctx, `FINAL SCORE  ${Math.floor(this.sim.score)}`, S.VIEW_W / 2, 156, 2, P.chargeHigh);
     if (m > 14 && Math.floor(this.t * 2) % 2 === 0) {
-      drawTextCentered(ctx, 'PRESS ACTION', S.VIEW_W / 2, 176, 1, P.hudDim);
+      drawTextCentered(ctx, 'PRESS BOOST', S.VIEW_W / 2, 176, 1, P.hudDim);
     }
   }
 
@@ -1277,7 +1295,7 @@ export class Game {
       }
     }
     drawTextCentered(ctx, 'LEFT/RIGHT MOVE   UP/DOWN CHANGE', S.VIEW_W / 2, 120, 1, P.hudDim);
-    drawTextCentered(ctx, 'ACTION ENTER AT RIGHT', S.VIEW_W / 2, 130, 1, P.hudDim);
+    drawTextCentered(ctx, 'BOOST ENTER AT RIGHT', S.VIEW_W / 2, 130, 1, P.hudDim);
     drawTextCentered(ctx, 'BEST SCORES', S.VIEW_W / 2, 144, 1, P.hudDim);
     this.hi.slice(0, 4).forEach((h, i) => {
       drawTextCentered(ctx, `${h.name}  ${String(h.score).padStart(7, '0')}`, S.VIEW_W / 2, 156 + i * 8, 1, P.hudText);

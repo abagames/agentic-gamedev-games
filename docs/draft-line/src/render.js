@@ -135,9 +135,13 @@ const clamp = (v, lo, hi) => (v < lo ? lo : v > hi ? hi : v);
 // World sprites share the same ground-depth axis. Quantizing only the tie key to one
 // centimetre keeps effectively co-planar objects deterministic without changing any
 // visually meaningful near/far relationship. At the same key props paint first and cars
-// second, preserving the gameplay silhouette when two bases genuinely coincide.
+// second, preserving the gameplay silhouette when two bases genuinely coincide. The
+// checkpoint gate shares the same queue (it used to be its own pre-pass layer, which let
+// every prop and car BEYOND it paint over its CHECK/FINISH board); at a genuinely equal
+// depth it paints first, because a car straddling the gate plane reads as being at the
+// gate rather than behind it.
 const WORLD_DEPTH_CM = 100;
-const WORLD_KIND_ORDER = { prop: 0, traffic: 1, rival: 2 };
+const WORLD_KIND_ORDER = { gate: -1, prop: 0, traffic: 1, rival: 2 };
 export function sortWorldSprites(items) {
   return [...items].sort((a, b) => {
     const depth = Math.round(b.z * WORLD_DEPTH_CM) - Math.round(a.z * WORLD_DEPTH_CM);

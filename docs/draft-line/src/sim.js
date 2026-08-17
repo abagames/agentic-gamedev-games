@@ -17,7 +17,7 @@ export const RESULT = {
 // sound and HUD flashes; the simulation never knows about either.
 function emptyEvents() {
   return {
-    bump: false, spin: false, release: null, chargeFull: false,
+    bump: false, spin: false, release: null, chargeFull: false, slingReady: false,
     overtake: 0, checkpoint: false, finish: false, timeout: false, gameover: false,
     boostEnd: false, passes: [], chainEnd: null,
   };
@@ -58,6 +58,7 @@ export class Sim {
     this.spin = 0;
     this.stun = 0;
     this.zone = null;          // 'deep' | 'shallow' | null
+    this.slingGrace = 0;       // s of coyote time left in which a release still slingshots
     this.zoneLevel = 0;        // 0..1, for audio
     this.zoneDepth = 0;        // 0..1, how deep inside the band (1 = on the bumper)
     this.rivals = [];
@@ -65,6 +66,7 @@ export class Sim {
     this._trafficCursor = 0;
     this._advanceTrafficCursor();
     this._chargeWasFull = false;
+    this._slingReadyWas = false;   // edge latch for the ready cue; must not survive a run
     this.deepMetres = 0;
     this.stats = {
       deepMetres: 0, maxChain: 0, bumps: 0, spins: 0, overtakes: 0,
@@ -307,10 +309,56 @@ export class Sim {
     return { charge: 0, drag: 1, steer: 1, gFactor: 1 };
   }
 
+  // Half of the rule: "am I in a position from which a slingshot is possible?" — the
+  // positional half only. The single answer to "would a release right now be a slingshot?"
+  // is slingReady below, and the HUD gauge, the ready cue and _release all read THAT
+  // instead of re-deriving it: the defect that made this a getter was copies of the rule
+  // drifting apart, so the gauge promised a slingshot the release then refused to give.
+  //
+  // Coyote time: still a slingshot for BOOST.slingGrace after the last deep tick.
+  // Strictly > 0, so the grace is a half-open window [0, slingGrace): a release exactly
+  // slingGrace after leaving deep is NOT a slingshot. Chosen that way because the timer
+  // is decremented before the release is read, so "grace has run out" and "grace is
+  // exactly zero" have to be the same state — otherwise the window would silently be one
+  // tick longer than the constant says, and its length would depend on frame rate.
+  get slingArmed() {
+    return this.zone === 'deep' || this.slingGrace > 0;
+  }
+
+  // "A press right now IS a slingshot": armed AND the bar is actually full. This is what
+  // the white blink and the ready ping mean, and it is what _release itself uses, so the
+  // cue and the outcome are the same fact by construction. A full-but-unarmed gauge is dim
+  // gold and silent. minCharge is deliberately NOT the threshold here: between minCharge
+  // and CHARGE_MAX a release is legal but is an ORDINARY boost (no 1.4x, no chain), even
+  // inside the deep band — a partial deep release used to slingshot, which made the gauge
+  // lie in the other direction.
+  //
+  // `!boost.active` is the third term, and it exists for exactly the same reason as the
+  // other two: _release refuses while a boost is still running, so during those up to
+  // 2.43 s the white blink and the ready ping were promising a slingshot the button could
+  // not deliver — a press did literally nothing. Rather than buy the press back with an
+  // input buffer (another grace mechanism on top of the coyote window), the false CUE is
+  // deleted: while boosting the gauge stays plain blue and stays silent, and the blink and
+  // the ping arrive on the tick the slipstream actually becomes spendable again.
+  get slingReady() {
+    return this.charge >= S.CHARGE_MAX && this.slingArmed && !this.boost.active;
+  }
+
   _release(ev) {
+    // `boost.active` here is now redundant with slingReady's own !boost.active term, but is
+    // kept deliberately, for the same reason the slingArmed gate below is kept: this is the
+    // one place that states "you cannot spend a boost while a boost is running" as a RULE.
+    // slingReady only decides whether a release would be a SLINGSHOT; without this line an
+    // ordinary (minCharge..CHARGE_MAX) press would still restack a boost mid-boost.
     if (this.charge < S.BOOST.minCharge || this.boost.active) return;
     const c = this.charge / S.CHARGE_MAX;
-    const sling = this.zone === 'deep';
+    // Redundant since CHARGE_SHALLOW_CAP: charge can only REACH CHARGE_MAX while deep or
+    // inside the coyote window, so `charge >= CHARGE_MAX` already implies slingArmed. Kept
+    // anyway as the second layer of defence — the cap is a property of the charge loop and
+    // a future edit there (a new charge source, a pickup, a different band) could restore
+    // a full-but-unarmed gauge; this gate is the one place where "no slingshot without a
+    // deep tick" is stated as a rule rather than emerging from arithmetic.
+    const sling = this.slingReady;
     let dur = S.BOOST.baseDur + S.BOOST.durPerCharge * c;
     let gain = S.VMAX * (S.BOOST.baseGain + S.BOOST.gainPerCharge2 * Math.pow(c, S.BOOST.gainExp));
     if (sling) { dur *= S.BOOST.slingDur; gain *= S.BOOST.slingGain; }
@@ -352,11 +400,41 @@ export class Sim {
     this.zoneLevel = this.zone === 'deep' ? 1 : this.zone === 'shallow' ? 0.5 : 0;
     const zp = this._zoneParams();
 
+    // ---- slingshot coyote time. Resolved AFTER the zone and BEFORE the release read, so
+    // the tick on which the car leaves the deep band still has grace left (slingGrace - dt)
+    // rather than a one-tick hole where a perfectly timed release silently downgrades.
+    if (this.zone === 'deep') this.slingGrace = S.BOOST.slingGrace;
+    else if (this.slingGrace > 0) this.slingGrace = Math.max(0, this.slingGrace - dt);
+
     // ---- charge
     if (!spinning) {
       if (this.rearm > 0) this.rearm -= dt;
-      if (this.zone && this.rearm <= 0) this.charge = Math.min(S.CHARGE_MAX, this.charge + this._chargeRate() * dt);
-      else this.charge = Math.max(0, this.charge - S.CHARGE_DRAIN * dt);
+      const canCharge = this.rearm <= 0;
+      // The order of these four cases IS the rule; they are not independent.
+      //   1. deep      -> fill to CHARGE_MAX, as before.
+      //   2. in grace  -> hold, drain NOTHING. Checked before both the shallow give-back
+      //      and the clean-air drain: the coyote window means "you were deep an instant
+      //      ago", and at CHARGE_DRAIN a single tick already puts charge under CHARGE_MAX,
+      //      which would silently cancel the window it is supposed to protect. Holding for
+      //      out-of-zone too (not just deep -> shallow) is deliberate: the window is
+      //      defined by where you WERE, so splitting its behaviour on where you now are
+      //      would make the same 0.25 s mean two different things.
+      //   3. shallow   -> fill only to CHARGE_SHALLOW_CAP, and give back anything above it
+      //      at CHARGE_EXCESS_DRAIN, clamped AT the cap.
+      //   4. otherwise -> the old CHARGE_DRAIN leak.
+      if (this.zone === 'deep' && canCharge) {
+        this.charge = Math.min(S.CHARGE_MAX, this.charge + this._chargeRate() * dt);
+      } else if (this.slingGrace > 0) {
+        /* hold */
+      } else if (this.zone === 'shallow') {
+        if (this.charge > S.CHARGE_SHALLOW_CAP) {
+          this.charge = Math.max(S.CHARGE_SHALLOW_CAP, this.charge - S.CHARGE_EXCESS_DRAIN * dt);
+        } else if (canCharge) {
+          this.charge = Math.min(S.CHARGE_SHALLOW_CAP, this.charge + this._chargeRate() * dt);
+        }
+      } else {
+        this.charge = Math.max(0, this.charge - S.CHARGE_DRAIN * dt);
+      }
       if (this.charge >= S.CHARGE_MAX && !this._chargeWasFull) {
         this._chargeWasFull = true;
         ev.chargeFull = true;
@@ -364,6 +442,18 @@ export class Sim {
         this._chargeWasFull = false;
       }
       if (input.boost) this._release(ev);
+    }
+
+    // ---- ready cue. Edge-triggered on slingReady, resolved AFTER the release so a press
+    // on the very tick the gauge fills does not also ping (the release sound owns that
+    // frame, and charge is already back to 0 here). Falling back to false re-arms it, so
+    // dropping out of the tow and tucking back in pings again. `chargeFull` above stays as
+    // the pure charge-level edge; nothing consumes it today, but the two are genuinely
+    // different facts and collapsing them is what produced the lying cue in the first place.
+    {
+      const ready = this.slingReady;
+      if (ready && !this._slingReadyWas) ev.slingReady = true;
+      this._slingReadyWas = ready;
     }
 
     // ---- boost timer. Expiry is recorded now but settled only after collision/pass and
@@ -477,6 +567,8 @@ export class Sim {
     this.spin = S.HIT.spinTime;
     if (cause === 'shoulder') this.stats.spinShoulder++; else this.stats.spinRear++;
     this.charge = 0;
+    this.slingGrace = 0;   // a spin ends the tow; the grace cannot survive it either
+    this._slingReadyWas = false;   // re-arm the cue: recovering into a tow should ping again
     this._endChainSession(ev, 'spin', false);
     this._clearBoost();
     this.x = Math.max(-1.0, Math.min(1.0, this.x));
