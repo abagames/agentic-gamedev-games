@@ -1,0 +1,19 @@
+{
+  "name": "blink-scope",
+  "version": "1.0.0",
+  "description": "BLINK SCOPE - a one-button vector-radar arcade game: blink to the sweep's tip and fire a sonar shot",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "build": "node tools/build.mjs",
+    "test": "node tests/core.test.mjs",
+    "probe": "node tests/browser.probe.mjs",
+    "sim": "node tests/balance.sim.mjs 40 900",
+    "sim:patience": "node tests/patience.sim.mjs 40",
+    "record": "node tools/record-video.mjs"
+  },
+  "license": "ISC",
+  "devDependencies": {
+    "playwright": "^1.63.0"
+  }
+}

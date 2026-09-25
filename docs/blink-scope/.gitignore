@@ -1,0 +1,8 @@
+# Generated diagnostic captures
+/shots/
+/media/raw/
+/media/capture.webm
+/media/audio.webm
+
+# Local experiments and generated scratch files
+/scratchpad/
