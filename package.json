@@ -1,0 +1,27 @@
+{
+  "name": "agentic-gamedev-games",
+  "version": "1.0.0",
+  "description": "A collection of games created using [Agentic Gamedev Skills](https://github.com/abagames/agentic-gamedev-skills).",
+  "main": "index.js",
+  "directories": {
+    "doc": "docs"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/abagames/agentic-gamedev-games.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "bugs": {
+    "url": "https://github.com/abagames/agentic-gamedev-games/issues"
+  },
+  "homepage": "https://github.com/abagames/agentic-gamedev-games#readme",
+  "devDependencies": {
+    "playwright": "^1.63.0"
+  }
+}
