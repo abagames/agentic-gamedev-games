@@ -1,0 +1,16 @@
+{
+  "name": "skyhaul",
+  "private": true,
+  "scripts": {
+    "test": "node tests/core.test.cjs",
+    "probe": "node tests/browser.probe.cjs",
+    "sim": "node tests/balance.sim.cjs 30 300",
+    "campaign": "node tests/campaign.sim.cjs 20 800",
+    "sweep": "node tests/human-sweep.cjs 20",
+    "exploit": "node tests/exploit.sim.cjs 20",
+    "pocket": "node tests/pocket.sim.cjs",
+    "rescuer": "node tests/rescuer.sim.cjs",
+    "video": "node tools/record-video.cjs",
+    "stages": "node tests/stages.sim.cjs 20"
+  }
+}
