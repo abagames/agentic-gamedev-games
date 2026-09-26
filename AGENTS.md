@@ -26,6 +26,8 @@ When tags are drawn or supplied by the user, record them in the new game's READM
 
 Treat selected tags as creative constraints rather than literal feature requests. Each should influence the game's identity, but do not force a presentation-oriented tag into an artificial mechanic.
 
+An object tag may be interpreted through the function it performs rather than as the literal object or its customary genre (for example, trampoline as a transit point that protects while in use but wears out, door as a barrier that can be turned into a weapon, smokescreen as a trail that stalls pursuers).
+
 ## Concept development
 
 Use the installed Game Concept Workbench.
