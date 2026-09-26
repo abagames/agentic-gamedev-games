@@ -21,7 +21,7 @@ node tools/pick-tags.mjs
 
 The source code for each game in this repository lives under [`docs/`](./docs/).
 
-<a href="https://abagames.github.io/agentic-gamedev-games/draft-line/"><img src="./docs/draft-line/screenshot.gif" width="25%" loading="lazy" alt="DRAFT LINE gameplay"></a><a href="https://abagames.github.io/agentic-gamedev-games/blink-scope/"><img src="./docs/blink-scope/screenshot.gif" width="25%" loading="lazy" alt="BLINK SCOPE gameplay"></a><a href="https://abagames.github.io/agentic-gamedev-games/skyhaul/"><img src="./docs/skyhaul/screenshot.gif" width="25%" loading="lazy" alt="SKYHAUL gameplay"></a>
+<a href="https://abagames.github.io/agentic-gamedev-games/draft-line/"><img src="./docs/draft-line/screenshot.gif" width="25%" loading="lazy" alt="DRAFT LINE gameplay"></a><a href="https://abagames.github.io/agentic-gamedev-games/blink-scope/"><img src="./docs/blink-scope/screenshot.gif" width="25%" loading="lazy" alt="BLINK SCOPE gameplay"></a><a href="https://abagames.github.io/agentic-gamedev-games/skyhaul/"><img src="./docs/skyhaul/screenshot.gif" width="25%" loading="lazy" alt="SKYHAUL gameplay"></a><a href="https://abagames.github.io/agentic-gamedev-games/wreckfall/"><img src="./docs/wreckfall/screenshot.gif" width="25%" loading="lazy" alt="WRECKFALL gameplay"></a>
 
 ## More games made with Agentic Gamedev Skills
 

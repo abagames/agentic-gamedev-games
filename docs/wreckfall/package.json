@@ -1,0 +1,18 @@
+{
+  "name": "wreckfall",
+  "private": true,
+  "scripts": {
+    "test": "node tests/core.test.cjs",
+    "probe": "node tests/browser.probe.cjs",
+    "ladder": "node tests/ladder.sim.cjs 6 900 idle,mash,nearest,greedy,human,oracle",
+    "waves": "node tests/waves.sim.cjs 12 human && node tests/waves.sim.cjs 12 hgreedy",
+    "botcheck": "node tests/botcheck.sim.cjs",
+    "specials": "node tests/specials.sim.cjs 12 3",
+    "fairness": "node tests/fairness.sim.cjs 6 human && node tests/fairness.sim.cjs 6 human none",
+    "farm": "node tests/farm.sim.cjs 4 2 && node tests/farm.sim.cjs 4 5",
+    "extras": "node tests/extras.sim.cjs 10 5 thick && node tests/extras.sim.cjs 10 3 ufo",
+    "behaviors": "node tests/behaviors.sim.cjs 10 5",
+    "campaign": "node tests/campaign.sim.cjs 12 human,hgreedy,oracle,greedy",
+    "video": "node tools/record-video.cjs"
+  }
+}
