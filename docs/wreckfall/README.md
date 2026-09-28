@@ -65,7 +65,9 @@ ship left, then shows ALL CLEAR. The HUD shows the wave as "n/12".
 - **Z / Space / X / ↑**: fire. One shot on screen. Holding fire does not repeat, so each shot is a
   deliberate press.
 - **Space / Enter**: start.
-- **Touch**: drag anywhere to slide the cannon (relative). Tap, or tap with a second finger, to fire.
+- **Touch**: drag anywhere on the page, including the margins around the screen, to slide the cannon
+  (relative). Tap, or tap with a second finger, to fire. On a portrait screen the game screen sits high (spare height
+  split 1:3 above and below), leaving a thumb area under it.
 - **M**: mute.
 
 ## Core interaction and main decision
@@ -388,7 +390,7 @@ errors:
 - a single shot with no auto-repeat;
 - a hulk clink;
 - a wreck dropped onto a hulk (chain 2) while the cannon escapes;
-- touch drag and tap;
+- touch drag and tap, on the screen and in the margin outside it;
 - a death on the last life, game over, back to the title;
 - restart as a fresh game;
 - the attract demo.

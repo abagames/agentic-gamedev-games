@@ -171,7 +171,8 @@
     const r = cv.getBoundingClientRect();
     return ((clientX - r.left) / r.width) * W;
   }
-  cv.addEventListener("touchstart", (e) => {
+  // touch is read on the whole page, so the margins around the screen work too (the drag is relative)
+  addEventListener("touchstart", (e) => {
     e.preventDefault();
     A.init();
     anyPress = true;
@@ -185,7 +186,7 @@
       } else touch.tapFire = 6; // a second finger fires at once
     }
   }, { passive: false });
-  cv.addEventListener("touchmove", (e) => {
+  addEventListener("touchmove", (e) => {
     e.preventDefault();
     for (const t of e.changedTouches)
       if (t.identifier === touch.id) {
@@ -202,9 +203,9 @@
         touch.targetX = null;
       }
   };
-  cv.addEventListener("touchend", endTouch);
-  cv.addEventListener("touchcancel", endTouch);
-  cv.addEventListener("mousedown", () => { A.init(); anyPress = true; });
+  addEventListener("touchend", endTouch);
+  addEventListener("touchcancel", endTouch);
+  addEventListener("mousedown", () => { A.init(); anyPress = true; });
 
   function readInput() {
     const inp = {
@@ -785,6 +786,12 @@
     const ki = k >= 2 ? Math.floor(k) : k;
     cv.style.width = W * ki + "px";
     cv.style.height = H * ki + "px";
+    // on a portrait screen the spare height goes 1:3 above and below, leaving a thumb area for the
+    // drag; elsewhere the screen stays centred
+    const spare = Math.max(0, innerHeight - H * ki);
+    const top = innerHeight > innerWidth ? Math.floor(spare * 0.25) : Math.floor(spare / 2);
+    cv.style.marginTop = top + "px";
+    cv.style.marginBottom = spare - top + "px";
   }
   addEventListener("resize", fit);
   fit();

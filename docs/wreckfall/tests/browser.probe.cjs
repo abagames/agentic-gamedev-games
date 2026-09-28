@@ -1,5 +1,5 @@
 // Browser probe of the real page (file://): node tests/browser.probe.cjs [screenshotDir]
-// load → title → start → keyboard move/fire → hulk clink → wreck chain → touch drag/tap → death → game over → title → restart → demo.
+// load → title → start → keyboard move/fire → hulk clink → wreck chain → touch drag/tap (on and off the screen) → death → game over → title → restart → demo.
 const { chromium } = require("playwright");
 const path = require("path");
 const assert = require("node:assert/strict");
@@ -110,6 +110,30 @@ const shots = process.argv[2];
     const n0 = (await st()).shots;
     await tp("touchStart", sx); await page.waitForTimeout(60); await tp("touchEnd");
     await until((s) => s.shots === n0 + 1, 1500);
+  });
+  await check("touch: a drag and a tap in the margin outside the screen work too", async () => {
+    await page.setViewportSize({ width: 960, height: 768 }); // the 3× screen leaves 144 px each side
+    await page.waitForTimeout(100);
+    await until((s) => s.mode === "play" && !s.shot);
+    const box = await page.locator("#screen").boundingBox();
+    assert.ok(box.x >= 100, "margin " + box.x);
+    const cdp = await page.context().newCDPSession(page);
+    const my = box.y + box.height * 0.5;
+    const tp = (type, x) => cdp.send("Input.dispatchTouchEvent", { type, touchPoints: type === "touchEnd" ? [] : [{ x, y: my, id: 1 }] });
+    const x0 = (await st()).x;
+    const sx = box.x + box.width + 60; // right margin
+    await tp("touchStart", sx);
+    for (let i = 1; i <= 10; i++) { await tp("touchMove", sx + i * 6); await page.waitForTimeout(40); }
+    await page.waitForTimeout(400);
+    await tp("touchEnd");
+    const x1 = (await st()).x;
+    assert.ok(x1 > x0 + 10, `margin drag ${x0}->${x1}`);
+    await until((s) => s.mode === "play" && !s.shot);
+    const n0 = (await st()).shots;
+    await tp("touchStart", box.x / 2); await page.waitForTimeout(60); await tp("touchEnd"); // left margin tap
+    await until((s) => s.shots === n0 + 1, 1500);
+    await page.setViewportSize({ width: 672, height: 768 });
+    await page.waitForTimeout(100);
   });
   await check("losing the last life ends the game, then returns to the title", async () => {
     await until((s) => s.mode === "play" && !s.shot);
