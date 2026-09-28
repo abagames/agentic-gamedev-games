@@ -1,0 +1,16 @@
+{
+  "name": "undertow",
+  "private": true,
+  "scripts": {
+    "test": "node tests/core.test.cjs",
+    "probe": "node tests/browser.probe.cjs",
+    "ladder": "node tests/ladder.sim.cjs 4 900 plan && node tests/ladder.sim.cjs 8 600 idle,mash,o0f,h0f",
+    "perfect": "node tests/perfect.sim.cjs 8 plan 1,2,3,4,5,6,8,10",
+    "depth": "node tests/depth.sim.cjs 6 h0f",
+    "survivors": "node tests/survivors.sim.cjs 6 h0f",
+    "pacing": "node tests/pacing.sim.cjs 6 h0f",
+    "endgame": "node tests/endgame.sim.cjs 8 h0f",
+    "shots": "node tools/shots.cjs",
+    "video": "node tools/record-video.cjs media 4 16 13"
+  }
+}
