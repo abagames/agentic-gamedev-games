@@ -116,7 +116,8 @@ function step(s,input={}){
  }
  const p=s.player;p.invuln=Math.max(0,p.invuln-1);
  steer(s,input);
- if(input.fire&&p.fire===0){s.shots.push({lane:p.lane,layer:p.layer,z:.96,shifted:false});p.fire=17;event(s,'fire');}
+ // Single shot: a new shot only once the previous one has hit, been blocked or left the deck.
+ if(input.fire&&p.fire===0&&!s.shots.length){s.shots.push({lane:p.lane,layer:p.layer,z:.96,shifted:false});p.fire=17;event(s,'fire');}
  // Rests give a crowded field room to breathe; an empty field needs only a short beat before the next arrival.
  if(!s.enemies.length&&s.queue.length&&s.spawn>EMPTY_WAIT)s.spawn=EMPTY_WAIT;
  if(--s.spawn<=0&&s.queue.length){const e=s.queue.shift();e.z=.04;e.fireAt=.55+rand(s)*.16;e.dir=e.lane===0?1:e.lane===4?-1:e.dir??(rand(s)<.5?-1:1);e.turned=false;s.enemies.push(e);s.spawn=e.delay||65;}

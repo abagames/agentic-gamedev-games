@@ -125,3 +125,12 @@ with fresh stock; campaign statistics are stored separately in the same report.
 The policy now lives in `human-policy.js` beside the game (UMD: `HumanPolicy` in the browser,
 `module.exports` in Node) because it also pilots the attract demo. `tests/human-policy.cjs`
 re-exports it, so all test commands above are unchanged. Constants are unchanged.
+
+## Anticipatory routing press (2026-09-29)
+
+Hands-on single-shot play contradicted the policy (the user found no real difficulty change;
+the policy's mean fell from 18.4k to 7.3k). Routing swaps were only polled at the 12-tick decision
+cadence and missed the ~12-tick gap window. The policy now also plans one swap press for the tick
+the observed shot should reach the middle of the gap (Gaussian timing SD 3 ticks, at least 6 ticks
+after the previous press). Other constants are unchanged. A "fire only at recently seen targets"
+rule was tried and rejected: it cut stage-2 clears from 28/40 to 10/40.

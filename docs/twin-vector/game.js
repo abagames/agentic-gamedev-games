@@ -170,7 +170,8 @@ function scoreTable(){
   [[['weaver',[C.pink,C.white,C.blue]],['shifter',[C.white,C.pink,C.blue]]],'+200','INTERCEPT',C.gold],
   [[['core',[C.red,C.white,C.gold]]],'2000-5000','CORE',C.white]];
  rows.forEach(([who,pts,label,col],i)=>{const y=100+i*26;who.forEach(([name,colors],j)=>sprite(name,who.length>1?58+j*20:70,y+3,name==='core'?1.2:1.4,colors,Math.floor(s.tick/14)));text(pts,96,y,col);text(label,160,y,C.cyan);});
- text('EXTEND 15000 AND EVERY 20000',128,214,C.gold,1,true);
+ // The first three thresholds, from the engine's rule (15000 then every 20000); a fourth is out of reach.
+ text('EXTEND '+[0,1,2].map(i=>E.EXTEND_FIRST+E.EXTEND_EVERY*i).join(' '),128,214,C.gold,1,true);
  if(s.tick%80<50)text('PUSH SPACE',128,242,C.white,1,true);
 }
 function draw(){
