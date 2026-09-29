@@ -45,3 +45,6 @@ out/
 .DS_Store
 Thumbs.db
 Desktop.ini
+
+# TWIN VECTOR test outputs (development evidence lives in tmp/games/twin-vector)
+docs/twin-vector/evidence/
