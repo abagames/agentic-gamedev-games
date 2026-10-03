@@ -48,3 +48,6 @@ Desktop.ini
 
 # TWIN VECTOR test outputs (development evidence lives in tmp/games/twin-vector)
 docs/twin-vector/evidence/
+
+# HEAD RUSH test outputs (development evidence lives in tmp/games/head-rush)
+docs/head-rush/evidence/

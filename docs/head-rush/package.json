@@ -1,0 +1,14 @@
+{
+  "name": "head-rush",
+  "private": true,
+  "description": "HEAD RUSH - Head On style dot-eat race with a Championship Edition tempo",
+  "scripts": {
+    "test": "node tests/rules.cjs && node tests/browser.cjs && node tests/feel.cjs",
+    "test:rules": "node tests/rules.cjs",
+    "test:browser": "node tests/browser.cjs",
+    "test:feel": "node tests/feel.cjs",
+    "balance": "node tests/balance.cjs 16 3",
+    "shots": "node tests/shots.cjs",
+    "video": "node tools/record-video.cjs"
+  }
+}
