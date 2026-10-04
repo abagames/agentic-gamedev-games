@@ -108,11 +108,19 @@ Work in two stages. The user decides between them.
 
 ### Stage 1: the slice
 
-The default deliverable is the slice: the first playable version, built, tuned, and validated as the sections below describe, and nothing more. It exists so the user can judge whether the concept is worth finishing.
+The default deliverable is the slice: the smallest version in which the core decision can be judged by playing it. It exists so the user can decide whether the concept is worth finishing.
 
-- Do not run a refinement loop on it, and do not add lives, extends, an ending, a title sequence, or an attract loop unless the core experience depends on them.
-- Save it with `node tools/snapshot.mjs tmp/games/<slug> first-playable`. A play report is evidence about the build that was played.
-- In the completion report, list the structural weaknesses that the checks already made have shown: what play mostly consists of, which simple policy comes closest to skilled play, which threat or mechanic rarely matters. This lets the concept be judged apart from the roughness of a first version. Do not rate how promising it is; that judgment is the user's.
+A slice that asks nothing of the player cannot be judged, so tune it as far as the core decision needs and no further:
+
+- Structure: the core interaction is what play consists of, and simple play (doing nothing, repeating one input, taking the nearest target) loses early.
+- Pressure: the player is under real pressure within the first moments of a run, and it does not let up for a player who plays well. Set this against the strong policy first: it must be at risk of failing, not able to continue indefinitely. Use the human-limited policy as a secondary check. A slice tuned only to a human-limited policy has come out too easy here.
+- The `refining-game-prototypes` skill may be used for these two points. Leave the rest of its stages for finishing.
+
+Do not add a difficulty curve across many rounds, an ending, extends, a title sequence, or an attract loop unless the core experience depends on them.
+
+- Save the first playable build with `node tools/snapshot.mjs tmp/games/<slug> first-playable`, and the build handed over for play under its own label. A play report is evidence about the build that was played.
+- In the completion report, list the structural weaknesses that remain. Do not rate how promising the slice is; that judgment is the user's.
+- State that difficulty is uncalibrated until a play report exists.
 - Run `node tools/check-done.mjs tmp/games/<slug>` before the completion report.
 
 Then stop. Do not start stage 2 on your own.
@@ -121,13 +129,24 @@ Then stop. Do not start stage 2 on your own.
 
 Start when the user asks to finish or promote a slice. When the brief asks for a finished game from the start, build the slice, snapshot it, and continue into this stage without stopping.
 
-Refine the game with the `refining-game-prototypes` skill; the skill owns the procedure. Do not stop to ask which option to take. Choose, proceed, and record the options not taken. Ask only before an irreversible or outward-facing action.
+Do not stop to ask which option to take. Choose, proceed, and record the options not taken. Ask only before an irreversible or outward-facing action.
 
-Add what the concept's run structure calls for and nothing it does not: a defined end to a run where a run is meant to end, a lives and extend economy where the game has lives, a title and attract loop where the game presents itself as an arcade cabinet, a play-feel pass, and a mix whose levels were measured where the game has sound.
+Finishing turns the slice into the full game the concept described. It is partly repair and partly building; the building steps below are done whether or not a check reported a finding. Work in this order:
+
+1. **Structure.** Refine with the `refining-game-prototypes` skill until the core decision holds up. Weaknesses in the core decision that the slice report listed are dealt with here, not carried forward.
+2. **Content.** Add the variation the full-game concept named when it was designed (see the README and the design record), one element at a time. Keep an element only if its effect can be seen on screen, it changes the best action, and it is not the ordinary game with pressure removed; otherwise remove it and record why. Stop when each stretch of a run introduces something new, or when the remaining candidates fail those tests. Do not invent elements the concept did not name unless the named ones are exhausted.
+3. **Difficulty and progression.** With the content settled, set the run structure the concept calls for and nothing it does not: a defined end where a run is meant to end, at most one new element per round, and a lives and extend economy where the game has lives.
+4. **Presentation.** Do each of these as a deliberate pass, with the named skill, and record what was changed and what was considered and left out:
+   - visuals, with `directing-game-visuals`: protagonist, danger, and reward tell apart at a glance; text and actors are large enough to carry the action;
+   - play feel, with `maximizing-game-feel`: list every important event and give each a response or an explicit "none";
+   - sound, with `building-era-authentic-game-audio` or `designing-retro-arcade-sound-kits`: a complete event kit, a decision on music with its reason, and levels measured at the output;
+   - a title and attract loop where the game presents itself as an arcade cabinet.
+   Presentation changes must leave seeded simulated results identical.
+5. **Cleanup.** The cleanup stage of `refining-game-prototypes`.
 
 Required in this stage:
 
-- Keep `REVISION_HISTORY.md` in the game directory from the first change onward: the intent, each finding with its cause and evidence, what was tried and not adopted, and what was never measured.
+- Keep `REVISION_HISTORY.md` in the game directory (start it earlier if the slice was revised): the intent, each finding with its cause and evidence, what was tried and not adopted, and what was never measured.
 - Snapshot every build handed to the user for play.
 - State whether difficulty is calibrated against a play report, and on which build. Without a report, say it is uncalibrated.
 - Run `node tools/check-done.mjs tmp/games/<slug> --stage finished` before the completion report.
@@ -152,7 +171,8 @@ Look for:
 - hazards unrelated to the core mechanic,
 - rewards that fail to justify ambitious or skillful play,
 - success that produces little meaningful state change,
-- failure that feels arbitrary.
+- failure that feels arbitrary,
+- the most natural response to a threat being punished more than ignoring it.
 
 Prefer structural changes over merely increasing speed, spawn rate, score, or effect intensity.
 
@@ -164,8 +184,8 @@ Simulated players must be limited in execution as well as information. Precise b
 
 Use a ladder of policies and state which one each conclusion rests on:
 
-- strong or oracle policies to detect exploits and degenerate strategies,
-- a human-limited policy to set difficulty, timers, and pacing.
+- strong or oracle policies to detect exploits and degenerate strategies, and as the primary reference for how much pressure the game applies,
+- a human-limited policy to check difficulty, timers, and pacing against a modelled person.
 
 The baseline is a comparison against simple policies (idle, repeated input, nearest-target greed) plus the sanity checks below. Add more only when a finding calls for it: a stronger policy, such as look-ahead over copied states, when the strong policy is shown to fail in ways a person would avoid; a weaker rung when a play report falls below every policy; policies that stall or only survive when the game has a goal that could be bypassed.
 

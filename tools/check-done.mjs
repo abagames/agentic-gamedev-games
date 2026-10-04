@@ -72,6 +72,6 @@ console.log("REMIND  README covers every item in AGENTS.md's README list, and ex
 if (stage === "finished") {
   console.log("REMIND  REVISION_HISTORY states the intent, what was not adopted, what was never measured, and whether difficulty is calibrated (and on which build)");
 } else {
-  console.log("REMIND  the completion report lists the structural weaknesses already visible, and does not rate how promising the slice is");
+  console.log("REMIND  the completion report lists the structural weaknesses that remain, and does not rate how promising the slice is");
 }
 process.exit(missing.length ? 1 : 0);
