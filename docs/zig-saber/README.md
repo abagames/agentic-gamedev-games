@@ -68,7 +68,7 @@ One button: **Space**, **Z**, **X**, **Enter**, **↑/↓**, a mouse click or a 
 - **Gems** sit near the rock in the canyon and cavern, and on the flight line in the fortress (the middle of every
   gate, 24 px off the tip of every tooth, the centre of a sealed lane): 100, 200 … 800 for an unbroken chain, multiplied by the cut chain; letting one scroll
   past resets the gem chain. Each gem also refills the laser clock, so the rock side is where a level is kept alive.
-- Extra ship at 100 000, then every 300 000.
+- Extra ship at 200 000, 600 000, 1 400 000 and 3 000 000 — four at most.
 - Each game deals the pilot a three-letter call sign from a fixed roster of 50 (shown in the HUD in place of `1UP`); a ranking score is written
   into the BEST 5 under that name at once. There is no name entry.
 - Three ships. A lost ship comes back about two seconds of flight before the place it was lost — the nearest roomy
@@ -157,9 +157,9 @@ Results (3 ships + extends, the two-loop game; the development logs and screensh
 | mash 6 / 12 / 30 | 1 300 / 3 100 / 900 | 0 | |
 | survivor | 300 | 0 | trains |
 | shooter | 4 800 | 0 | shells, rock |
-| human-limited (16 seeds) | 512 000 | 0 % clear the game, 13 % reach loop 2 | 125 s, 4.8 ships lost |
-| expert (8 seeds) | 4 552 000 | 100 % clear the game | 368 s, 4.5 ships lost |
-| precise | 6 374 000 | clears the game | 334 s, no ship lost |
+| human-limited (12 seeds) | about 500 000 | 0 % clear the game, 17 % reach loop 2 | 0.7 extra ships, 3.7 lost |
+| expert (8 seeds) | about 4 500 000 | 63 % clear the game, 100 % reach loop 2 | 3.6 extra ships, 4.5 lost |
+| precise | 6 374 000 | clears the game | no ship lost |
 
 Gate alone, loop 1: destroyed in 27 s by the human-limited profile (1.0 ships lost), 20 s by the expert, 13 s by the precise planner.
 
@@ -185,7 +185,7 @@ Needs Node 18+ and the repository's Playwright (`npm install` at the repo root).
 
 | command | what it does |
 |---|---|
-| `npm test` | rules (92 checks), audio contract (20), browser flow and feel (32) |
+| `npm test` | rules (93 checks), audio contract (20), browser flow and feel (32) |
 | `npm run test:rules` | mechanic conformance on `core.js`, course fairness, monotony ladder |
 | `npm run test:audio` | chip-model audio contract |
 | `npm run test:browser` | real key / pointer input, attract, READY, cut freeze and input buffering, pause, capsule, laser, zone, death, game over, dealt pilot name, ranking persistence, restart, visibility, mute |
@@ -203,8 +203,6 @@ Needs Node 18+ and the repository's Playwright (`npm install` at the repo root).
   quite easy, while the human-limited bot cleared it 19 % of the time; so that bot is weaker than the player and has
   not been recalibrated. The current build (heat, point-blank double, armour that costs every level, the reworked
   gate, the anti-milking scoring) has not been played by a person.
-- **Extends are probably too frequent for a strong player.** "100 000, then every 300 000" was chosen when a game
-  scored a tenth of what it does now; the expert profile loses 4.5 ships and still clears.
 - The all-gems zone bonus has not been achieved by any simulated player; whether it is reachable by hand in the
   canyon and cavern, where gems hug the rock, is not shown.
 - Whether the signs are noticed in play is unmeasured: the point-blank marks, the reach marks, the chain gauge and

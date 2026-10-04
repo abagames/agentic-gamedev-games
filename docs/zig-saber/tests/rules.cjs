@@ -251,7 +251,10 @@ ok('three zones, checkpoint at each start and middle', co.zones.length === 3 && 
     ok('when it is off the screen the loop ends with no bonus', q.phase === 'clear' && q.won === false && q.score === sc && q.boss.x > C.W - 10, { x: Math.round(q.boss.x), ticks: k }); }
   st.boss.plates[2].s = 'open'; st.boss.plates[2].t = 200; st.boss.hp = 1; st.boss.left = 60 * 20 + 5; st.laser = 0; st.score = C.EXTEND[0] - 100; st.ship.y = ZS.rowY(2) + 10; st.ship.dir = -1; ZS.step(st, true); t = 0; while (st.phase === 'play' && t++ < 40) ZS.step(st, false);
   ok('the last hit destroys the gate: gate bonus, 5000 for every second left on it, loop bonus, and an extend when the score crosses the first threshold', st.phase === 'clear' && st.won === true && st.score - (C.EXTEND[0] - 100 + 200 + C.BOSS_BONUS + C.LOOP_BONUS) >= 19 * C.GATE_SEC && st.score - (C.EXTEND[0] - 100 + 200 + C.BOSS_BONUS + C.LOOP_BONUS) <= 20 * C.GATE_SEC && st.lives === C.LIVES + 1 && st.stats.loops === 1 && !st.final, st.score);
-  ok('extra ships at 100000, then every 300000', C.EXTEND[0] === 100000 && st.nextExtend === 400000, st.nextExtend);
+  ok('extra ships at 200000, 600000, 1400000 and 3000000, and no more', C.EXTEND.join() === '200000,600000,1400000,3000000' && st.nextExtend === 600000, st.nextExtend);
+  { const q = ZS.newGame(); q.phase = 'play'; q.nextEv = 1e9; q.pending.push({ at: q.t + 1, stage: 1, type: 'drone', spd: 1, y: q.ship.y - 20 }); q.score = 9999900; q.extends = 0; q.nextExtend = C.EXTEND[0];
+    ZS.step(q, false); ZS.step(q, false); q.enemies[0].x = NOSE + 40; q.enemies[0].y = q.ship.y - 10; ZS.step(q, true);
+    ok('even ten million points earn only the four', q.lives === C.LIVES + 4 && q.extends === 4 && q.nextExtend === Infinity, [q.lives, q.nextExtend]); }
   for (let i = 0; i < C.CLEAR; i++) ZS.step(st, false);
   ok('then the next loop starts at READY on the first zone, without the gate', st.phase === 'ready' && st.loop === 1 && st.zone === 0 && st.cp === 0 && st.boss === null);
   // the second loop is the last

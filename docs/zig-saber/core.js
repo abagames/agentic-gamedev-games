@@ -14,7 +14,7 @@
       // stock limit, shots per capsule
     MARK: 40, GUARD: 30,          // ticks an entry is announced at the right edge; ticks a spent laser charge shields the ship
     READY: 110, READY_BACK: 60, BACKUP: 144, DEAD: 80, CLEAR: 200, // BACKUP: px of scroll a lost ship is set back (2 s)
-    LIVES: 3, EXTEND: [100000], EXTEND_EVERY: 300000, // extra ship at 100000, then every 300000
+    LIVES: 3, EXTEND: [200000, 600000, 1400000, 3000000], EXTEND_EVERY: Infinity, // four extra ships at most; the gap doubles each time
     NO_MISS: 5, GEM_PERFECT: 100000, GATE_SEC: 5000, // zone bonus x5 without losing a ship in it; every gem of a zone; per second left on the gate
     HEAT: 0.08, CLOSE: 24,        // heat: every chain step makes new enemies 8 % faster and adds aimed drones; a cut within 24 px of the nose pays double
     LOOPS: 2, SHIP_BONUS: 50000,  // the game is two loops long; clearing it pays for every ship left

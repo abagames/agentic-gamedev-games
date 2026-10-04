@@ -5,6 +5,12 @@ are the ones measured at that time, not the current ones (see `README.md` for th
 
 Structural:
 
+- **Round 16 (user chose option C of four simulated extend rules).** "100 000, then every 300 000" dated from when a
+  game scored a tenth as much; at current scores the expert profile collected 13 extra ships, lost 4.5 and cleared
+  every time. Now four at most, with a doubling gap: 200 000, 600 000, 1 400 000, 3 000 000. Simulated: expert clears
+  63 % (was 100 %) with 3.6 extra ships; human-limited keeps its early one (0.7 on average) and reaches loop 2 as
+  often as before (17 %). No extends at all gave 0 % clears for everyone.
+
 - **Round 15 (user: "is the time bonus set so that destroying the gate quickly beats shooting its drones until the
   clock runs out?" — it was not).** Measured by letting each bot fight a gate whose core never weakens: milking paid
   934 000 against 546 000 for destroying it (precise bot), 691 000 against 543 000 (expert), because the escorts were
