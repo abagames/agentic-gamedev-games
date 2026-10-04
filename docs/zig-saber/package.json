@@ -1,0 +1,18 @@
+{
+  "name": "zig-saber",
+  "private": true,
+  "description": "ZIG SABER - one-button side-scrolling terrain shooter: every press turns the ship and fires",
+  "scripts": {
+    "test": "node tests/rules.cjs && node tests/audio.cjs && node tests/browser.cjs",
+    "test:rules": "node tests/rules.cjs",
+    "test:audio": "node tests/audio.cjs",
+    "test:browser": "node tests/browser.cjs",
+    "balance": "node tests/balance.cjs 10 2",
+    "campaign": "node tests/campaign.cjs 16",
+    "loops": "node tests/loops.cjs expert 6",
+    "deaths": "node tests/deaths.cjs 12",
+    "course": "node tests/dump.cjs",
+    "video": "node tools/record-video.cjs",
+    "shots": "node tests/shots.cjs && node tests/feelshot.cjs && node tests/bossshot.cjs"
+  }
+}

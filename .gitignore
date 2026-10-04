@@ -51,3 +51,6 @@ docs/twin-vector/evidence/
 
 # HEAD RUSH test outputs (development evidence lives in tmp/games/head-rush)
 docs/head-rush/evidence/
+
+# ZIG SABER test outputs (development evidence lives in tmp/games/zig-saber)
+docs/zig-saber/evidence/
