@@ -84,7 +84,8 @@ One button: **Space**, **Z**, **X**, **Enter**, **↑/↓**, a mouse click or a 
   - Send the wave into an open row: one damage. The gate has 24. A closed plate stops the wave.
   - **The hit pays 200 × the number of rows open at that moment.** Open rows let out files of drones, so holding
     several open is where the score and the danger are.
-  - At laser level 3 the blade itself reaches the core: three damage, 1000 × chain × open rows, and that row slams shut.
+  - The blade cannot hurt the core, however long it is: its part is the plates. (At laser level 3 the blade reaches
+    the gate, so the wave leaves its tip already inside the open row and lands at once.)
   - Below half strength the gate goes into overdrive: plates 40 % sooner, a fourth escort drone.
   - Its time is counted down at the top of the corridor (`TIME 75`), ticking for the last ten seconds. Destroyed: 20 000 × loop, plus 5 000 × loop for
     every second left, plus the loop bonus. The gate's own plates and drones pay plain value (no chain, no
@@ -161,7 +162,7 @@ Results (3 ships + extends, the two-loop game; the development logs and screensh
 | expert (8 seeds) | about 4 500 000 | 63 % clear the game, 100 % reach loop 2 | 3.6 extra ships, 4.5 lost |
 | precise | 6 374 000 | clears the game | no ship lost |
 
-Gate alone, loop 1: destroyed in 27 s by the human-limited profile (1.0 ships lost), 20 s by the expert, 13 s by the precise planner.
+Gate alone (unlimited ships): the human-limited profile destroys it in 24 s on loop 1 and 33 s on loop 2, losing 0.8 / 1.6 ships; the expert in 22 s / 26 s, losing 0.3.
 
 What rests on what: "monotonous play loses" holds on every profile. The campaign's difficulty rests on the
 human-limited and expert profiles. The precise planner clears both loops without losing a ship.
@@ -185,7 +186,7 @@ Needs Node 18+ and the repository's Playwright (`npm install` at the repo root).
 
 | command | what it does |
 |---|---|
-| `npm test` | rules (93 checks), audio contract (20), browser flow and feel (32) |
+| `npm test` | rules (94 checks), audio contract (20), browser flow and feel (32) |
 | `npm run test:rules` | mechanic conformance on `core.js`, course fairness, monotony ladder |
 | `npm run test:audio` | chip-model audio contract |
 | `npm run test:browser` | real key / pointer input, attract, READY, cut freeze and input buffering, pause, capsule, laser, zone, death, game over, dealt pilot name, ranking persistence, restart, visibility, mute |

@@ -239,8 +239,11 @@ ok('three zones, checkpoint at each start and middle', co.zones.length === 3 && 
     ok('with three rows open the same hit pays three times', q.score - s0 === 600, q.score - s0);
     q.boss.hp = Math.floor(q.boss.hp0 / 2); q.boss.launchT = 1; q.enemies = []; q.boss.plates.forEach(p => { if (p.s !== 'open') p.s = 'on'; }); ZS.step(q, false); ZS.step(q, false);
     ok('below half strength the gate goes into overdrive: plates come 40 % sooner', q.boss.over === true && q.boss.launchT <= Math.round(B.LAUNCH * 0.6)); }
-  st.laser = 3; st.laserT = 400; st.ship.y = ZS.rowY(2) + 10; st.ship.dir = -1; st.chain = 0; const s2 = st.score; ZS.step(st, true);
-  ok('at laser level 3 the blade reaches the core: three damage, 1000, and the row slams shut', st.boss.hp === B.HP - 4 && st.score - s2 === 1000 && st.boss.plates[2].s === 'on' && st.chain === 1);
+  st.laser = 3; st.laserT = 400; st.ship.y = ZS.rowY(2) + 10; st.ship.dir = -1; st.chain = 0; st.shot = null; const hp2 = st.boss.hp, s2 = st.score; ZS.step(st, true);
+  ok('the blade does not hurt the core, even at laser level 3 where it reaches the gate: only the wave leaving its tip does, by one, and the row stays open', st.boss.hp === hp2 - 1 && st.score - s2 === 200 && st.boss.plates[2].s === 'open' && ev(st, 'bosshit')[0].how === 'wave' && ev(st, 'slash').length === 0, [st.boss.hp, hp2, st.boss.plates[2].s]);
+  { let k = 0; const q = ZS.clone(st); while (k++ < 300 && q.boss.plates[2].s === 'open') { ZS.step(q, k % 9 === 0); q.laser = 3; q.laserT = 400; q.ship.y = ZS.rowY(2) + 10; q.ship.dir = -1; q.enemies = []; q.boss.launchT = 999; q.boss.emitT = 999; }
+    ok('so an opened row stays open for its whole 4.5 s however often the ship swings', k >= 200, { ticks: k }); }
+  st.laser = 0; st.shot = null;
   st.boss.plates[1].s = 'fly'; st.enemies = [{ type: 'plate', x: -11, y: ZS.rowY(1), v: K.v, w: K.w, h: K.h, train: 0, warn: 0, age: 99, plate: 1 }]; st.ship.y = 180; ZS.step(st, false);
   ok('a plate that gets past returns to the gate', st.boss.plates[1].s === 'on' && st.enemies.length === 0);
   { const q = ZS.clone(st); q.boss.left = 2; q.boss.launchT = 999; q.boss.emitT = 999; q.boss.plates[2].s = 'open'; q.boss.plates[2].t = 999; q.enemies = []; q.ship.y = ZS.rowY(2) + 10; q.ship.dir = -1; ZS.step(q, false); ZS.step(q, false);

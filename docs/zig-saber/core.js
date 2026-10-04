@@ -20,7 +20,7 @@
     LOOPS: 2, SHIP_BONUS: 50000,  // the game is two loops long; clearing it pays for every ship left
     GEM_CAP: 8, ZONE_BONUS: 10000, LOOP_BONUS: 20000, BOSS_BONUS: 20000,
     // the gate at the end of the loop: five core rows behind five steel plates
-    BOSS: { FACE: 208, ROWS: 5, Y0: 50, DY: 35, HP: 24, HPR: 0, PLATE_V: 1.2, PLATES: 2, OPEN: 270, ARM: 30, LAUNCH: 70, EMIT: 100, ESCORT: 3, TIME: 4500, CUT: 3, AWAY: 100, AWAY_V: 0.7 },
+    BOSS: { FACE: 208, ROWS: 5, Y0: 50, DY: 35, HP: 24, HPR: 0, PLATE_V: 1.2, PLATES: 2, OPEN: 270, ARM: 30, LAUNCH: 70, EMIT: 100, ESCORT: 3, TIME: 4500, AWAY: 100, AWAY_V: 0.7 },
   };
   const KIND = {
     drone: { w: 12, h: 10, v: 2.4, far: 100, cut: 300 },
@@ -259,8 +259,7 @@
   function coreRows(y, d) { const out = []; for (let i = 0; i < C.BOSS.ROWS; i++) { const t = (rowY(i) - y) * d; if (t >= -(C.BACK + 16) && t <= C.AHEAD + 16) out.push(i); } return out; }
   function hurtBoss(st, dmg, how) {
     const b = st.boss; b.hp -= dmg; b.flash = 8; st.stats.bossHits++;
-    const rows = Math.max(1, b.plates.filter(p => p.s === 'open').length + (how === 'cut' ? 1 : 0)); // the cut has just shut its own row
-    const pts = (how === 'cut' ? 1000 * (1 + st.chain) : 200) * rows; add(st, pts);
+    const rows = Math.max(1, b.plates.filter(p => p.s === 'open').length), pts = 200 * rows; add(st, pts); // only the wave reaches the core; the blade's part is the plates
     st.events.push({ type: 'bosshit', how, x: C.BOSS.FACE, pts, rows, hp: Math.max(0, b.hp) });
     if (b.hp <= 0) { b.dead = true; st.stats.bossKills++; st.enemies = []; st.pending = []; st.shot = null; const sec = Math.floor(b.left / 60), pts = (C.BOSS_BONUS + sec * C.GATE_SEC) * (st.loop + 1); st.stats.gateSec += sec; add(st, pts); st.events.push({ type: 'bossdead', pts, sec }); endLoop(st, true); }
   }
@@ -316,15 +315,13 @@
     // The laser is not a second weapon: each level makes the blade longer. Everything inside it is cut.
     const max = Math.min(C.REACH[st.laser], C.W - nose), len = reach(st, nose, ym, max);
     const cut = st.enemies.filter(e => inSwing(e, sh.y, d) && e.x + e.w / 2 >= nose - 4 && e.x - e.w / 2 <= nose + len).sort((a, b) => a.x - b.x);
-    const core = bossIn(st) && nose + len >= C.BOSS.FACE ? coreRows(sh.y, d).filter(i => st.boss.plates[i].s === 'open') : [];
-    if (cut.length || core.length) { // the blade bites: everything inside it is cut, and the energy is back at once
+    if (cut.length) { // the blade bites: everything inside it is cut, and the energy is back at once
       const nearN = cut.filter(e => e.x - e.w / 2 <= nose + C.CLOSE).length; st.stats.closeCuts += nearN;
       cut.forEach((e, k) => kill(st, e, 'cut', k, 1 + st.chain, e.x - e.w / 2 <= nose + C.CLOSE));
-      if (core.length && st.boss && !st.boss.dead) { const p = st.boss.plates[core[0]]; p.s = 'on'; p.t = 0; st.events.push({ type: 'regrow', y: rowY(core[0]) }); hurtBoss(st, C.BOSS.CUT, 'cut'); } // a cut into the core is worth three waves, and slams that row shut
       st.chain = Math.min(C.CHAIN_MAX, st.chain + 1); st.chainT = Math.round(C.CHAIN_T[st.chain] * (nearN ? 1.5 : 1)); st.stats.maxChain = Math.max(st.stats.maxChain, st.chain);
       if (cut.length > 1) st.stats.multi++; st.stats.maxCut = Math.max(st.stats.maxCut, cut.length);
       if (cut.length && cut[cut.length - 1].x - cut[0].w / 2 > nose + C.REACH[0]) st.stats.longCuts++;
-      st.events.push({ type: 'slash', y: sh.y, d, len, lv: st.laser, n: cut.length + core.length, chain: st.chain, near: nearN });
+      st.events.push({ type: 'slash', y: sh.y, d, len, lv: st.laser, n: cut.length, chain: st.chain, near: nearN });
     } else if (nose + len >= C.W) st.events.push({ type: 'swing', y: sh.y, d, len, lv: st.laser }); // full reach: nothing left for a wave to do
     else { // rock stops the blade but not the wave: it leaves from the blade's tip and flies through
       if (len < max) st.events.push({ type: 'spark', x: nose + len, y: ym, own: true });

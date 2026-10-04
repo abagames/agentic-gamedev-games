@@ -5,6 +5,13 @@ are the ones measured at that time, not the current ones (see `README.md` for th
 
 Structural:
 
+- **Round 17 (user: check whether the first plate destroyed fails to become "destroyed").** No state bug: 374 plate
+  kills over 38 simulated fights all left their row open. The cause was a rule: at laser level 3 the blade reached
+  the core, and a cut into the core dealt three damage and shut the row. Since every press swings, the row opened by
+  cutting a plate was shut by the very next press — 44 of 50 opened rows closed within a second (mean 0.52 s instead
+  of 4.5 s), and the last sealed lane hands out level 3 just before the gate. The user chose to make the core immune
+  to the blade. Rows now stay open 4.5 s at every level; the wave is the only thing that damages the core.
+
 - **Round 16 (user chose option C of four simulated extend rules).** "100 000, then every 300 000" dated from when a
   game scored a tenth as much; at current scores the expert profile collected 13 extra ships, lost 4.5 and cleared
   every time. Now four at most, with a doubling gap: 200 000, 600 000, 1 400 000, 3 000 000. Simulated: expert clears
