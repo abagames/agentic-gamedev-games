@@ -102,6 +102,40 @@ Do not modify an existing game or its dependency lockfile.
 
 Use generated or third-party assets only when their license and provenance can be recorded. Procedural, code-drawn, or deliberately minimal art is acceptable.
 
+## Slice first, then finish
+
+Work in two stages. The user decides between them.
+
+### Stage 1: the slice
+
+The default deliverable is the slice: the first playable version, built, tuned, and validated as the sections below describe, and nothing more. It exists so the user can judge whether the concept is worth finishing.
+
+- Do not run a refinement loop on it, and do not add lives, extends, an ending, a title sequence, or an attract loop unless the core experience depends on them.
+- Save it with `node tools/snapshot.mjs tmp/games/<slug> first-playable`. A play report is evidence about the build that was played.
+- In the completion report, list the structural weaknesses that the checks already made have shown: what play mostly consists of, which simple policy comes closest to skilled play, which threat or mechanic rarely matters. This lets the concept be judged apart from the roughness of a first version. Do not rate how promising it is; that judgment is the user's.
+- Run `node tools/check-done.mjs tmp/games/<slug>` before the completion report.
+
+Then stop. Do not start stage 2 on your own.
+
+### Stage 2: finishing
+
+Start when the user asks to finish or promote a slice. When the brief asks for a finished game from the start, build the slice, snapshot it, and continue into this stage without stopping.
+
+Refine the game with the `refining-game-prototypes` skill; the skill owns the procedure. Do not stop to ask which option to take. Choose, proceed, and record the options not taken. Ask only before an irreversible or outward-facing action.
+
+Add what the concept's run structure calls for and nothing it does not: a defined end to a run where a run is meant to end, a lives and extend economy where the game has lives, a title and attract loop where the game presents itself as an arcade cabinet, a play-feel pass, and a mix whose levels were measured where the game has sound.
+
+Required in this stage:
+
+- Keep `REVISION_HISTORY.md` in the game directory from the first change onward: the intent, each finding with its cause and evidence, what was tried and not adopted, and what was never measured.
+- Snapshot every build handed to the user for play.
+- State whether difficulty is calibrated against a play report, and on which build. Without a report, say it is uncalibrated.
+- Run `node tools/check-done.mjs tmp/games/<slug> --stage finished` before the completion report.
+
+### Tools
+
+Apart from `snapshot.mjs` and `check-done.mjs`, everything in `tools/` is optional help, described in `tools/README.md`: a rules adapter for the bot ladder and its audit, scene capture, calibration, and the run-summary line. Use a tool when a question about the game needs the evidence it produces and that evidence is cheaper than the alternatives. A game that answers its questions another way, or whose rules cannot run outside a browser, uses none of them and needs no explanation beyond its test notes.
+
 ## Tune
 
 Once the core loop works, play it before adding significant content or polish.
@@ -126,18 +160,20 @@ A useful tuning change should alter meaningful player behavior, decisions, or ac
 
 ### Simulated players
 
-Simulated players must be limited in execution as well as information. Precise bots systematically overestimate human players.
+Simulated players must be limited in execution as well as information. Precise bots overestimate human players; hand-written bots with weak decisions underestimate them. Both have happened here, so do not assume a direction.
 
 Use a ladder of policies and state which one each conclusion rests on:
 
 - strong or oracle policies to detect exploits and degenerate strategies,
 - a human-limited policy to set difficulty, timers, and pacing.
 
+The baseline is a comparison against simple policies (idle, repeated input, nearest-target greed) plus the sanity checks below. Add more only when a finding calls for it: a stronger policy, such as look-ahead over copied states, when the strong policy is shown to fail in ways a person would avoid; a weaker rung when a play report falls below every policy; policies that stall or only survive when the game has a goal that could be bypassed.
+
 A human-limited policy should model, where relevant, reaction latency to new danger, timing error, attention lapses (not checking secondary threats), position-reading error, decay of stale information, and re-orientation time after the frame of reference changes (teleport, camera cut, moved pivot). It should not be able to repeat accurate actions faster than a person could.
 
 A claim that a strategy is dominant or balanced should hold across the ladder, or be reported as skill-dependent.
 
-When the user's hands-on play contradicts bot results, treat the play report as the stronger evidence and correct the human-limited model toward it.
+When the user's hands-on play contradicts bot results, treat the play report as the stronger evidence and correct the human-limited model toward it. Compare the report with the policies on the build that was played. Fit it numerically only when a difficulty decision depends on the result.
 
 After structural tuning, perform an explicit play-feel pass.
 
@@ -179,7 +215,7 @@ A smoke test alone is not evidence that the intended gameplay works.
 
 Before trusting simulated-player results, sanity-check the simulated players themselves: human-plausible input rate, plausible causes of failure, and no artifact of their own model (such as stale predictions converging on the player) driving the outcome.
 
-After tuning, rerun checks affected by the changes.
+After tuning, rerun checks affected by the changes. A change meant to touch only drawing or sound must leave seeded simulated results identical, where the game has them.
 
 Do not claim behavior was validated if it was not exercised.
 
@@ -197,6 +233,8 @@ In the new game's `README.md`, document:
 - local run instructions,
 - available test commands,
 - known untested behavior or limitations.
+
+Once finishing has begun, keep the history of changes in `REVISION_HISTORY.md`, not in the README; the README describes the game as it is.
 
 ## Repository guardrails
 
@@ -237,6 +275,8 @@ Report:
 - the skills actually used,
 - the main structural tuning performed,
 - the main play-feel tuning performed,
+- for a slice, the structural weaknesses already visible,
 - validation performed and its results,
+- whether difficulty is calibrated against a play report, and on which build,
 - any untested behavior,
 - any remaining blocker.

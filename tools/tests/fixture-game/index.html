@@ -1,0 +1,29 @@
+<!doctype html>
+<meta charset="utf-8">
+<title>fixture</title>
+<canvas id="c" width="224" height="256"></canvas>
+<script>
+  // Minimal page for tools/shots.mjs: two scenes and a frame report.
+  const ctx = document.getElementById("c").getContext("2d");
+  let drawn = [];
+  function text(id, s, x, y, z) {
+    ctx.fillStyle = "#fff";
+    ctx.font = "7px monospace";
+    ctx.fillText(s, x, y + 7);
+    drawn.push({ id, kind: "text", rect: [x, y, s.length * 5, 7], glyphH: 7, z });
+  }
+  function base() {
+    drawn = [];
+    ctx.fillStyle = "#000";
+    ctx.fillRect(0, 0, 224, 256);
+  }
+  window.__test = {
+    scenes: {
+      plain() { base(); text("score", "SCORE 100", 8, 8, 1); },
+      "clear-and-extend"() { base(); text("clear", "WAVE CLEAR", 80, 100, 1); text("extend", "EXTEND", 90, 102, 2); return 50; },
+    },
+    frame: () => ({ elements: drawn }),
+    // What a game does when a run ends: log the summary and put it in the URL fragment.
+    endRun(line) { console.log(line); location.hash = encodeURIComponent(line); },
+  };
+</script>
