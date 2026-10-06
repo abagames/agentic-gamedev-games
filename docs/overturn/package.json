@@ -1,0 +1,15 @@
+{
+  "name": "overturn",
+  "private": true,
+  "description": "OVERTURN - flipperless pinball: the only control turns the whole table, and the rim that returns the ball wears through",
+  "scripts": {
+    "test": "node tests/rules.cjs && node tests/audio.cjs && node tests/browser.cjs && node tests/touch.cjs",
+    "test:rules": "node tests/rules.cjs",
+    "test:audio": "node tests/audio.cjs",
+    "test:touch": "node tests/touch.cjs",
+    "test:browser": "node tests/browser.cjs",
+    "balance": "node tests/balance.cjs 8",
+    "video": "node tools/record-video.cjs",
+    "deaths": "node tests/deaths.cjs 3"
+  }
+}

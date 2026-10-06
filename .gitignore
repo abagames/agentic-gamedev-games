@@ -54,3 +54,7 @@ docs/head-rush/evidence/
 
 # ZIG SABER test outputs (development evidence lives in tmp/games/zig-saber)
 docs/zig-saber/evidence/
+
+# OVERTURN test outputs (development evidence lives in tmp/games/overturn)
+docs/overturn/evidence/
+docs/overturn/reports/
