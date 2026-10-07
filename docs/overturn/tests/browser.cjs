@@ -111,7 +111,7 @@ let last = '(start)'; // the last check that passed, printed if a later step fai
   await p.waitForTimeout(1300); await shot('b-bonus');
   ok('the last ball is lost and its bonus is counted', await ev(() => __game.fx.log.includes('BONUS|7X300|2100') && __game.audio.musicName === null), await ev(() => ({ log: __game.fx.log.slice(-4), music: __game.audio.musicName, phase: __game.state.phase, mode: __game.mode })));
   await p.waitForFunction(() => __game.mode === 'over', null, { timeout: 20000 }); await p.waitForTimeout(200); await shot('b-over');
-  const hash = decodeURIComponent(await ev(() => location.hash)); ok('game over writes the run summary', /^#RUN v1 build=\S+ progress=\d+ score=\d+ time=\d+ fail=/.test(hash), hash);
+  ok('game over leaves the address bar alone', (await ev(() => location.hash)) === '');
   ok('and the score enters the best five', await ev(() => __game.best.includes(__game.state.score)));
   await ev(() => { __game.best.splice(0, 5, 900000, 800000, 700000, 600000, 500000); __game.setRank(-1); }); await p.waitForTimeout(120); await shot('b-over-unranked');
   await ev(() => { __game.best.splice(0, 5, 900000, 800000, __game.state.score, 600000, 500000); __game.setRank(2); }); await p.waitForTimeout(120); await shot('b-over-ranked');
@@ -125,7 +125,6 @@ let last = '(start)'; // the last check that passed, printed if a later step fai
   ok('with a round left waiting, the lower panel shows the same thing on the title and best-five pages, and it does not blink', onTitle === onBest && onTitle.includes('#'), { litDots: onTitle.split('#').length - 1 });
   await ev(() => { __game.state.ready = -1; __game.state.spell = 0; __game.setModeT(1e6); }); await p.waitForTimeout(300);
   ok('and the loop is back at the title', (await ev(() => __game.attract)) === 'title');
-  ok('the run summary stays in the address bar', decodeURIComponent(await ev(() => location.hash)).startsWith('#RUN v1'));
   await p.keyboard.press('Space'); await p.waitForTimeout(100);
   ok('the button starts a fresh game', await ev(() => __game.mode === 'play' && __game.state.score === 0 && __game.state.balls === 3 && __game.state.segs.every(h => h === 3)));
   ok('no console errors', errs.length === 0, errs);

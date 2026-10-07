@@ -132,7 +132,6 @@
   function start() {
     st = OT.create(runSeed++); mode = 'play'; modeT = 0; combo = 0; rank = -1; paused = false; freeze = 0; resetFx(); show(2, [{ s: 'READY', dur: 60, eff: 'flash' }]);
     OTAudio.init(); OTAudio.play('start'); OTAudio.music('play');
-    if (location.hash) history.replaceState(null, '', location.pathname + location.search);
   }
   function resetFx() { fx.parts.length = fx.trail.length = fx.fly.length = fx.ghosts.length = 0; fx.wob = 0; fx.seg.fill(0); fx.lamp.fill(0); fx.tgt.fill(0); fx.tgtWait.fill(0); fx.warnT = 0; fx.shake = fx.hub = fx.zoom = fx.flash = fx.dflash = fx.net = fx.mult = 0; fx.show = fx.award = null; }
   function button() { OTAudio.init(); if (mode === 'title' || (mode === 'over' && modeT > 60)) start(); }
@@ -223,9 +222,6 @@
     else if (ev.type === 'over' && mode === 'play') {
       mode = 'over'; modeT = 0; OTAudio.play('over'); OTAudio.music(null); fx.show = null;
       rank = best.findIndex(v => s.score > v); if (rank >= 0) { best.splice(rank, 0, s.score); best.length = 5; try { localStorage.setItem('overturn.best', JSON.stringify(best)); } catch (e) { /* see above */ } }
-      const fail = Object.keys(s.causes).map(k => k + ':' + s.causes[k]).join(',');
-      const line = 'RUN v1 build=' + BUILD + ' progress=' + s.level + ' score=' + s.score + ' time=' + Math.round(s.t * C.TICK) + (fail ? ' fail=' + fail : '');
-      console.log(line); location.hash = encodeURIComponent(line);
     }
   }
 

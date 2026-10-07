@@ -156,10 +156,6 @@ Shared ladder, 16 seeds, means (`strong`: `npm run balance`, 3 seeds, medians):
 | human | 121 s | 22.1 | 740,219 |
 | strong | 428 s | 108 | 5,473,200 |
 
-A run ends with one line in the console and the address bar:
-`RUN v1 build=40-video progress=<banks> score=<n> time=<s> fail=drop:<n>,fling:<n>`
-(`drop`: out through the bottom quarter; `fling`: out anywhere else).
-
 ## Not tested, and limits
 
 - Calibration: seven play reports from one player. The first two (02-slice, 03-full) fitted the
