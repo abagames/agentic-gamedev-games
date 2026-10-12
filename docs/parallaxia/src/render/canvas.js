@@ -1447,8 +1447,8 @@ function drawRate(ctx, sim, fx) {
   let rate = killMultiplier(sim, sim.ship.x, sim.ship.y, 99);
   if (scoring === "close") {
     rate = 1;
-    for (const enemy of sim.enemies) rate = Math.max(rate, closeMultiplier(distanceTo(sim, enemy.x, enemy.y, KINDS[enemy.kind]), enemy.y));
-    for (const target of sim.ground.targets) if (target.hp > 0) rate = Math.max(rate, Math.min(RATE.close.ground, closeMultiplier(distanceTo(sim, target.x, target.y, { halfW: GROUND.kinds[target.kind].half, halfH: GROUND.kinds[target.kind].half }), target.y)));
+    for (const enemy of sim.enemies) rate = Math.max(rate, closeMultiplier(distanceTo(sim, enemy.x, enemy.y, KINDS[enemy.kind])));
+    for (const target of sim.ground.targets) if (target.hp > 0) rate = Math.max(rate, Math.min(RATE.close.ground, closeMultiplier(distanceTo(sim, target.x, target.y, { halfW: GROUND.kinds[target.kind].half, halfH: GROUND.kinds[target.kind].half }))));
   }
   const blink = scoring === "chain" && fx && fx.chainLost > 0 && fx.chainLost % 8 < 4;
   if (!blink) text(ctx, `X${String(rate).padStart(2, " ")}`, 94, 9, rate > 1 ? C.reward : C.hudValue);

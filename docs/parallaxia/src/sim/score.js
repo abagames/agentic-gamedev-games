@@ -18,9 +18,8 @@ export function addScore(sim, points) {
 export const firstExtend = (sim) => MODES[sim.mode].extend;
 
 // What a kill at this distance from the ship pays in the "close" mode.
-export function closeMultiplier(dist, y) {
-  const { near, far, topY } = RATE.close;
-  if (y > topY) return 1;
+export function closeMultiplier(dist) {
+  const { near, far } = RATE.close;
   // It rises faster the nearer the ship is (the square of how far in it has
   // come), so that the last few units, where the danger is, pay the most.
   const t = Math.max(0, Math.min(1, (far - dist) / (far - near)));
@@ -42,7 +41,7 @@ export function killMultiplier(sim, x, y, dist = null, box = null, onGround = fa
   const scoring = scoringOf(sim);
   if (scoring === "chain") return Math.min(1 + sim.chain, RATE.max);
   if (scoring === "graze") return Math.max(1, Math.min(RATE.max, Math.floor(sim.rate + 1e-9)));
-  const mult = closeMultiplier(dist ?? distanceTo(sim, x, y, box), y);
+  const mult = closeMultiplier(dist ?? distanceTo(sim, x, y, box));
   return onGround ? Math.min(mult, RATE.close.ground) : mult;
 }
 

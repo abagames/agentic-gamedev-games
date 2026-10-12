@@ -158,15 +158,7 @@ export const keeperWith = ({ wings = true } = {}) => ({
       // Lasers: let go once the locks have stopped coming (a core takes one),
       // or with a full hand.
       const letGo = obs.locks >= 4 || (obs.locks > 0 && lockAge >= 12);
-      // Where being close scores: no shots while all they could reach is
-      // still above the line (RATE.close.topY).
-      let wait = false;
-      if (style === "close") {
-        let lowest = Infinity;
-        for (const e of enemies) if (e.y > ship.y && Math.abs(e.x - ship.x) < 2.6 + (KINDS[e.kind].halfW - 1.2)) lowest = Math.min(lowest, e.y);
-        wait = lowest !== Infinity && lowest > 13.7;
-      }
-      bits = letGo || wait ? move : move | INPUT.SHOT;
+      bits = letGo ? move : move | INPUT.SHOT;
       return bits;
     };
   },

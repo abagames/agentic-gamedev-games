@@ -193,6 +193,34 @@ export default {
       g.step(12, 16);
       out.wingLock = [s.locks.length >= 1, s.locks.every((l) => l.target === outer.id)];
 
+      // CLOSE: a boss's part pays by how near the ship is to that part, as
+      // anything does, and as much when the boss has been knocked to the top
+      // of the field. [the multiplier, how high the part was]
+      const wingKill = (gap, bodyY) => {
+        const s2 = at(10);
+        for (let t = 0; t < 95; t++) {
+          safe(s2);
+          g.step(1, 0);
+        }
+        if (bodyY !== null) body(s2).y = bodyY;
+        const wing = s2.enemies.filter((e) => e.parent).sort((a, b) => b.x - a.x)[0];
+        wing.hp = 1;
+        for (let t = 0; t < 60; t++) {
+          safe(s2);
+          s2.bullets = [];
+          s2.ship.respawn = 0;
+          // (Under the wing's outer half: a shot from under its middle,
+          // late on a boss that is moving, can touch the wing inside it.)
+          s2.ship.x = wing.x + 1;
+          s2.ship.y = body(s2).y - 0.8 - gap;
+          g.step(1, 16);
+          const e = s2.events.find((x) => x.type === "destroy" && x.kind === "wing");
+          if (e) return [e.mult, r2(e.y)];
+        }
+        return [-1, 99];
+      };
+      out.closeWing = [wingKill(2, null), wingKill(8, null), wingKill(20, null), wingKill(2, 14)];
+
       // Other sections have no boss; a drill has none either.
       s = at(4);
       out.none = [s.enemies.some((e) => e.boss), s.stage.boss];
@@ -211,6 +239,8 @@ export default {
     check("the large boss leaves after 24 seconds", r.bigLeft, true);
     check("section 10 belongs to the large boss: a body and four wings", r.big, (v) => v[0] === "bigboss,wing,wing,wing,wing" && v[1] === 10);
     check("from under an outer wing, locks settle on that wing", r.wingLock, (v) => v[0] && v[1]);
+    check("CLOSE: a wing shot from 2 under it pays x16, from 8 under x7, from 20 under x1", r.closeWing, (v) => v[0][0] === 16 && v[1][0] === 7 && v[2][0] === 1);
+    check("CLOSE: a boss knocked up to y 14 still pays x16 from 2 under its wing", r.closeWing, (v) => v[3][0] === 16 && v[3][1] > 13.5);
     check("section 4 has no boss", r.none, (v) => v[0] === false && v[1] === 0);
   },
 };

@@ -166,7 +166,7 @@ checks and measurements.
   differently in each mode: in CLOSE by being near, in CHAIN by wiping out formations in a row, in
   GRAZE by enemy bullets passing close.
 - CLOSE measures to the edge of the target's hit box and rises faster the nearer the ship is (the
-  square). Above y 13.5 it is x1. Ground targets stop at x6.
+  square). Above y 13.5 it was x1 (removed 2026-10-12, see 1.14). Ground targets stop at x6.
 - GRAZE: radius 2, +1 a bullet. On the author's instruction it sinks from one second after the
   last graze, by 1.2 a second.
 
@@ -200,6 +200,21 @@ checks and measurements.
 - **Bullets split at a set distance.** The time to a split was a number of frames, so a faster
   bullet split further away. It is now divided by the bullet's speed; the median distance a carrier
   flies is 3.3 to 3.9 in every mode.
+- **CLOSE pays by distance all the way up the field.** The author asked whether CLOSE pays for
+  getting near a boss's parts. It does: each part is measured to the edge of its own hit box (a
+  wing shot from 2 under it pays x16, from 8 under x7; under the body's centre, a large boss's
+  outer wing is 5.9 away and pays x10). One case did not: each wing shot off knocks the body up
+  0.6, a large boss near the top of its tour passes y 13.5 on the third, and above that line every
+  kill paid x1 however near the ship was (measured: x1 at y 13.8 and 14, from 2 under). The author
+  judged the line unnecessary whether or not a boss is involved, and it is gone (`RATE.close.topY`,
+  and `keeper` holding its fire while its target was above the line). A probe for a boss's parts in
+  CLOSE was added; the boss probe had only ever parked the ship far away.
+  The line was there so that waiting where the enemies come in would not score. Not measured with a
+  policy that does that on purpose: `hold_up_shot` scores the same before and after (7,300, over in
+  12.3 s), because it does not aim. Over 12 runs of five minutes in CLOSE, `keeper` went from
+  145,463 to 140,489 points a minute (0.64 to 0.61 misses a minute) and `seeker` from 50,914 to
+  50,986; `keeper` no longer waits for its target to come down, so its figures are not a
+  like-for-like comparison of the rule alone.
 
 ## 2. Difficulty and progression
 

@@ -251,7 +251,8 @@ export const MODES = Object.freeze({
 //          measured to the edge of its hit box so that big things are not
 //          further away for being big: RATE.max within `near`, 1 from `far`
 //          on, rising with the square of how far in the ship has come.
-//          Nothing above topY pays more than 1, so sitting where the enemies come in earns nothing.
+//          It holds all the way up the field (author's decision, 2026-10-12;
+//          until then nothing above y 13.5 paid more than 1).
 //          A laser's kill counts the distance at which it was let go.
 //   graze  +gain for every enemy bullet that passes within `radius` of the
 //          ship; after `idle` frames without one it sinks by `decay` a frame.
@@ -264,7 +265,7 @@ export const RATE = Object.freeze({
   // ground: the most a thing on the ground pays, however near. The ground
   // comes to the ship and does not fight back, so being near it is no risk;
   // the high multipliers are kept for what is.
-  close: Object.freeze({ near: 3, far: 16, topY: 13.5, ground: 6 }),
+  close: Object.freeze({ near: 3, far: 16, ground: 6 }),
   // radius: generous on purpose (author's instruction); the ship is hit at 0.45.
   graze: Object.freeze({ radius: 2, gain: 1, idle: 60, decay: 1 / 50 }),
 });

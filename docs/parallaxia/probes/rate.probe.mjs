@@ -160,8 +160,8 @@ export default {
       return out;
     });
     const want = (d) => 100 * Math.max(1, Math.min(16, Math.round(1 + 15 * Math.max(0, Math.min(1, (16 - d) / 13)) ** 2)));
-    check("CLOSE: a kill pays 100 x 16 within 3, x 1 from 16 on (half the screen), rising faster the nearer it is", r.close, (v) => v.slice(0, 4).every((k) => k[1] <= 13.5 && k[2] === want(k[0])) && v[0][2] === 1600 && v[3][2] === 100 && v[1][2] > v[2][2] && v[2][2] > 100);
-    check("CLOSE: nothing above y 13.5 pays more than x 1, however close", r.close, (v) => v[4][0] < 3 && v[4][1] > 13.5 && v[4][2] === 100);
+    check("CLOSE: a kill pays 100 x 16 within 3, x 1 from 16 on (half the screen), rising faster the nearer it is", r.close, (v) => v.slice(0, 4).every((k) => k[2] === want(k[0])) && v[0][2] === 1600 && v[3][2] === 100 && v[1][2] > v[2][2] && v[2][2] > 100);
+    check("CLOSE: it pays the same at the top of the field: a kill above y 13.5 within 3 pays 100 x 16", r.close, (v) => v[4][0] < 3 && v[4][1] > 13.5 && v[4][2] === 1600);
     check("CLOSE: a laser let go 3 away pays 500 x 16 though the ship has moved off", r.laser, (v) => v[0] === 1 && v[1] === 8000);
     check("CLOSE: distance is to the edge of the hit box: a large enemy 3.5 off centre pays 1000 x 16", r.big, 16000);
     check("CLOSE: what is on the ground pays no more than x6: a panel 2 away pays 50 x 6", r.groundCap, 300);
