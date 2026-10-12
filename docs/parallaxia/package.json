@@ -1,0 +1,23 @@
+{
+  "name": "parallaxia",
+  "private": true,
+  "type": "module",
+  "description": "PARALLAXIA: a modern remake of PARSEC47 for the browser Canvas.",
+  "scripts": {
+    "check": "node tools/check.mjs",
+    "test": "node --test \"test/*.test.mjs\"",
+    "serve": "node tools/serve.mjs",
+    "smoke": "node tools/smoke.mjs",
+    "screenshot": "node tools/screenshot.mjs",
+    "probe": "node tools/probe.mjs",
+    "balance": "node tools/balance.mjs",
+    "trace": "node tools/trace.mjs",
+    "check:paths": "node tools/check-paths.mjs"
+  },
+  "engines": {
+    "node": ">=22"
+  },
+  "devDependencies": {
+    "playwright": "^1.63.0"
+  }
+}
