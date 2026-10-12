@@ -237,7 +237,7 @@ export const LOCK = Object.freeze({
 // The original scales its ship the same way: 0.42 to 0.72 by difficulty.
 export const MODES = Object.freeze({
   normal: Object.freeze({ name: "CLOSE", bulletSpeed: 1, density: 1, shipSpeed: 0.4, scoring: "close", extend: 500000 }),
-  rapid: Object.freeze({ name: "CHAIN", bulletSpeed: 1.45, density: 0.5, shipSpeed: 0.52, scoring: "chain", extend: 1000000 }),
+  rapid: Object.freeze({ name: "CHAIN", bulletSpeed: 1.4, density: 0.5, shipSpeed: 0.52, scoring: "chain", extend: 800000 }),
   dense: Object.freeze({ name: "GRAZE", bulletSpeed: 0.65, density: 1.7, shipSpeed: 0.34, scoring: "graze", extend: 300000 }),
 });
 
@@ -455,9 +455,6 @@ export const GROUND = Object.freeze({
 // A formation is one wave of small enemies. Destroying all of it pays a bonus
 // that grows with every formation wiped out in a row (assumption).
 export const FORMATION = Object.freeze({ bonus: 500, maxChain: 16 });
-
-// assumption: extra ships at 500,000, at 1,000,000 and at every 1,000,000 after.
-export const SCORE = Object.freeze({ firstExtend: 500000, everyExtend: 1000000 });
 
 export const GAMEOVER = Object.freeze({ lockFrames: 60 });
 

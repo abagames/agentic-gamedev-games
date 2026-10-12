@@ -209,12 +209,19 @@ checks and measurements.
   went from 0.96 to 0.35 in CLOSE, 0.65 to 0.39 in CHAIN, 0.73 to 0.40 in GRAZE. Bullet speed now
   follows the square root of the rank (`speed-curve`).
 - **Extends** moved several times. They stand at every 500,000 points in CLOSE, 300,000 in GRAZE
-  and 1,000,000 in CHAIN (the author's decisions), up to 4 ships.
+  and 800,000 in CHAIN (the author's decisions), up to 4 ships.
 - **The length of a CHAIN run** (2026-10-12, `chain-speed`): the author's replays ran 255 seconds
   in CLOSE and 267 in GRAZE against 484 in CHAIN. Extends alone could not even that out, so enemy
   bullets in CHAIN went from 1.35 to 1.45 times and the extend from 700,000 to 1,000,000. The
   estimate was 314 seconds; played out by the policy afterwards, the median was 365, 50 seconds
   longer. The values are the author's and were left.
+- **CHAIN at 1.4 times and 800,000** (2026-10-12, `chain-1.4`; the author's instruction, after the
+  game was declared complete; no reason was given): enemy bullets from 1.45 to 1.4 times CLOSE's,
+  the extend from every 1,000,000 points to every 800,000. `author`, 48 runs to game over on the
+  same seeds under the present rules: 187 / 229 / 286 seconds before, 196 / 234 / 316 after
+  (quartiles), sector 21 either way, the median run now reaching one extend where it reached none.
+  The unused constant `SCORE` (a first extend at 500,000, then every 1,000,000) was removed;
+  nothing read it. Not played by the author yet.
 - **Declared complete** (2026-10-12): the author played it and accepted the play feel, the look and
   the sound. Which snapshot was played was not recorded. There is no replay from after the enemy
   bullets' hit test was corrected, so difficulty has not been fitted to numbers since then.

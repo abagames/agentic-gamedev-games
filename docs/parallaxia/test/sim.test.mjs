@@ -87,7 +87,7 @@ test("replay: malformed replays are rejected", () => {
 
 test("extends: an extra ship every so many points, evenly, by mode", async () => {
   const { addScore } = await import("../src/sim/score.js");
-  for (const [mode, every] of [["normal", 500000], ["rapid", 1000000], ["dense", 300000]]) {
+  for (const [mode, every] of [["normal", 500000], ["rapid", 800000], ["dense", 300000]]) {
     const sim = game.createSim({ seed: 1, mode });
     const lives = sim.lives;
     addScore(sim, every - 10);
