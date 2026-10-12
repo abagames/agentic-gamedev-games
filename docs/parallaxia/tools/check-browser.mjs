@@ -33,7 +33,7 @@ const BINDINGS = {
   2: ["ArrowDown", "KeyS"],
   4: ["ArrowLeft", "KeyA"],
   8: ["ArrowRight", "KeyD"],
-  16: ["KeyZ"],
+  16: ["KeyZ", "KeyX", "KeyJ", "KeyK", "Space", "Enter"],
 };
 
 const game = await openGame({ seed: 1 });

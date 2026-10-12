@@ -27,7 +27,14 @@ const KEY_BITS = {
   KeyS: INPUT.DOWN,
   KeyA: INPUT.LEFT,
   KeyD: INPUT.RIGHT,
+  // Shot: Z and X beside the arrow keys, J and K for the hand that is not on
+  // WASD, and the two keys anyone tries first.
   KeyZ: INPUT.SHOT,
+  KeyX: INPUT.SHOT,
+  KeyJ: INPUT.SHOT,
+  KeyK: INPUT.SHOT,
+  Space: INPUT.SHOT,
+  Enter: INPUT.SHOT,
 };
 
 const params = new URLSearchParams(location.search);
@@ -327,8 +334,8 @@ function pointerEnd(e) {
 window.addEventListener("pointerup", pointerEnd);
 window.addEventListener("pointercancel", pointerEnd);
 
-// Any connected pad: left stick or d-pad to move, any of the four face
-// buttons to shoot.
+// Any connected pad: left stick or d-pad to move; any of the four face
+// buttons, the two shoulder buttons or the two triggers to shoot.
 function gamepadBits() {
   let bits = 0;
   const pads = typeof navigator.getGamepads === "function" ? navigator.getGamepads() : [];
@@ -341,7 +348,7 @@ function gamepadBits() {
     if (x > 0.5 || pressed(15)) bits |= INPUT.RIGHT;
     if (y < -0.5 || pressed(12)) bits |= INPUT.UP;
     if (y > 0.5 || pressed(13)) bits |= INPUT.DOWN;
-    if (pressed(0) || pressed(1) || pressed(2) || pressed(3)) bits |= INPUT.SHOT;
+    for (let i = 0; i < 8; i++) if (pressed(i)) bits |= INPUT.SHOT;
   }
   return bits;
 }

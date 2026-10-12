@@ -105,6 +105,8 @@ try {
   check("gamepad: stick right and a face button", (await pad([0.9, 0], [0])) === (8 | 16));
   check("gamepad: stick up-left, no button", (await pad([-0.9, -0.9], [])) === (1 | 4));
   check("gamepad: d-pad down and another face button", (await pad([0, 0], [13, 2])) === (2 | 16));
+  check("gamepad: a shoulder button, and a trigger", (await pad([0, 0], [5])) === 16 && (await pad([0, 0], [6])) === 16);
+  check("gamepad: the buttons past the triggers do not shoot", (await pad([0, 0], [8, 9, 10, 11])) === 0);
   check("gamepad: a stick inside the dead zone does nothing", (await pad([0.3, -0.3], [])) === 0);
   check("gamepad: nothing connected", (await g(() => ((navigator.getGamepads = () => [null, null]), 0))) === 0);
 

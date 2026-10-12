@@ -1675,7 +1675,7 @@ export function drawTitle(ctx, { frame, hiScore, muted, modeName = "CLOSE", mode
   sprite(ctx, SHIP_SHAPES[modeId] ?? SPRITES.ship, 110, 186, C.ship, C.shipTrim, TONES.ship);
   if ((frame >> 4) % 2) centered(ctx, "PUSH SHOT", 204, C.hudValue, 2);
   centered(ctx, "MOVE   ARROWS / WASD / DRAG", 232, C.hud);
-  centered(ctx, "SHOT   Z / TOUCH", 240, C.hud);
+  centered(ctx, "SHOT   Z / X / SPACE / TOUCH", 240, C.hud);
   centered(ctx, "HOLD SHOT TO LOCK ON - RELEASE TO FIRE", 256, C.shot);
   centered(ctx, RATE_LINES[modeId] ?? "", 264, C.reward);
   centered(ctx, `${muted ? "M  SOUND OFF" : "M  SOUND ON"}     P  PAUSE`, 304, C.farStar);

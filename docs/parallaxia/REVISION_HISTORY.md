@@ -282,6 +282,12 @@ checks and measurements.
 - **Touch**: drag to move, and the shot fires while touching. The ship follows the finger's
   movement, not its position, and never faster than its own speed.
 - **Gamepad** (2026-10-10): left stick or d-pad to move, any of the four face buttons to shoot.
+- **More keys and buttons for the shot** (2026-10-12, the author's decision): the only shot key was
+  Z, which left WASD with both hands' work on the left hand. X, J, K, Space and Enter also shoot,
+  and so do a pad's shoulder buttons and triggers. Z stays the main key: on some keyboards Up, Left
+  and Space do not register together. Not added: Ctrl (with W it closes the tab), Shift (Windows
+  asks about sticky keys after five presses), Alt. The title's line reads "Z / X / SPACE / TOUCH";
+  J, K and Enter are not shown. Input mapping only: replays and state hashes are unchanged.
 - **Title, best score, mute, pause** (2026-10-10 to 10-11): a best score is kept per mode and start
   sector. Every run from the title has a new seed (it had always been seed 1).
 - **Shot after game over** goes back to the title instead of starting again (2026-10-11,
