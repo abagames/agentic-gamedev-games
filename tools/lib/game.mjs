@@ -17,8 +17,11 @@ export function loadAdapter(gameDir) {
   return adapter;
 }
 
-export function runOne(adapter, policy, seed, { maxS = 600, opts } = {}) {
+// variant: the name of one of adapter.variants, applied to the state right after create (start on
+// a later round, switch an element off); see tools/README.md
+export function runOne(adapter, policy, seed, { maxS = 600, opts, variant } = {}) {
   const state = adapter.create(seed, opts);
+  if (variant) adapter.variants[variant](state, seed);
   const maxTicks = Math.ceil(maxS / adapter.tickS);
   const u = { actions: {}, score: {}, regions: {}, fires: {}, hits: {}, failures: {} };
   const primary = adapter.intent && adapter.intent.primaryThreat;
@@ -118,7 +121,14 @@ export function summarize(runs) {
   };
 }
 
+export function checkVariant(adapter, variant) {
+  if (!variant) return;
+  const have = Object.keys(adapter.variants || {});
+  if (!have.includes(variant)) throw new Error(`unknown variant "${variant}" (have: ${have.join(", ") || "none; the adapter defines no variants"})`);
+}
+
 export function runPolicy(adapter, name, seeds, options) {
+  checkVariant(adapter, options && options.variant);
   const def = adapter.policies[name];
   if (!def) throw new Error(`unknown policy "${name}" (have: ${Object.keys(adapter.policies).join(", ")})`);
   const runs = seeds.map((seed) => runOne(adapter, def.make(seed), seed, options));

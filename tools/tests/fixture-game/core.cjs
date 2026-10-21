@@ -55,4 +55,14 @@ function step(st, input) {
 
 const ended = (st) => st.lives <= 0 || st.tick >= TICKS;
 
-module.exports = { create, step, ended, TICKS, BOLT_FLIGHT };
+// State hash for the review kit: the page and the adapter both call this one function.
+function hash(st) {
+  const s = JSON.stringify(st, (k, v) => (k === "events" ? undefined : v));
+  let h = 0x811c9dc5;
+  for (let i = 0; i < s.length; i++) h = Math.imul(h ^ s.charCodeAt(i), 0x01000193);
+  return (h >>> 0).toString(16).padStart(8, "0");
+}
+
+const api = { create, step, ended, hash, TICKS, BOLT_FLIGHT };
+if (typeof module !== "undefined" && module.exports) module.exports = api;
+else window.FixtureCore = api;

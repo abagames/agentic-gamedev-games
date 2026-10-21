@@ -40,8 +40,16 @@ module.exports = {
   events: (st) => st.events,
   region: (st) => ["top", "mid", "bottom"][st.lane],
   threatPresent: (st) => st.bolts.length > 0,
+  hash: core.hash,
+  player: (st) => ({ x: st.lane, y: 0 }),
+  threats: (st) => st.bolts.map((b) => ({ id: "bolt", x: b.lane, y: (b.landsAt - st.tick) / core.BOLT_FLIGHT })),
   result: (st) => ({ score: st.score, progress: st.coins, success: st.lives > 0 && st.tick >= core.TICKS, failures: st.hits ? { bolt: st.hits } : {} }),
   skillPolicy,
+  // variants for ladder --variant: start a run late in its clock, or with one life
+  variants: {
+    late: (st) => { st.tick = 1200; },
+    fragile: (st) => { st.lives = 1; },
+  },
   policies: {
     idle: { profile: "baseline", make: () => () => ({}) },
     survivor: { profile: "precise", role: "survive_only", make: (seed) => skillPolicy(1, seed, { collect: false }) },

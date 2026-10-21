@@ -2,7 +2,11 @@
 // Places a play report on the game's skill axis, on the build that was played.
 //
 //   node tools/calibrate.mjs <snapshot-dir> --summary "RUN v1 build=... progress=..."
+//   node tools/calibrate.mjs <snapshot-dir> --zip <review.zip> [--exclude earlier.zip]
 //        [--metrics progress,failures,score,time] [--seeds 12] [--steps 10] [--allow-unverified-build]
+//
+// With --zip, the zip's runs are the report: their medians (progress, score) and means
+// (failures, time), taken from each run's summary line, or from its replay where it has none.
 //
 // Needs adapter.skillPolicy(t, seed): one family of policies from t=0 (weakest modelled
 // player) to t=1 (strongest policy). One report cannot fix several parameters, so the
@@ -10,10 +14,9 @@
 //
 // Exit codes: 0 a skill range was identified; 1 the report cannot be placed
 // (wrong or unverified build, or no metric tells the policies apart); 2 usage.
-import { existsSync, readFileSync } from "node:fs";
-import path from "node:path";
 import { loadAdapter, parseArgs, runOne, summarize } from "./lib/game.mjs";
 import { parseRunSummary } from "./lib/run-summary.mjs";
+import { checkBuild, excludeList, loadSession, replayRun, replayable, reportExcluded } from "./lib/session.mjs";
 
 const METRICS = {
   progress: { sim: (s) => s.median_progress, rep: (r) => r.progress },
@@ -27,8 +30,8 @@ const METRICS = {
 
 const args = parseArgs(process.argv.slice(2), { "allow-unverified-build": "bool" });
 const dir = args._[0];
-if (!dir || !args.summary) {
-  console.error('usage: calibrate.mjs <snapshot-dir> --summary "RUN v1 ..." [--metrics a,b] [--seeds N] [--steps N] [--allow-unverified-build]');
+if (!dir || !args.summary === !args.zip) {
+  console.error('usage: calibrate.mjs <snapshot-dir> (--summary "RUN v1 ..." | --zip review.zip) [--metrics a,b] [--seeds N] [--steps N] [--allow-unverified-build]');
   process.exit(2);
 }
 const wanted = (args.metrics || "progress,failures,score").split(",");
@@ -38,26 +41,53 @@ if (unknown.length) {
   process.exit(2);
 }
 
-const report = parseRunSummary(args.summary);
+const session = args.zip ? loadSession(args.zip, { exclude: excludeList(args.exclude) }) : null;
+if (session) reportExcluded(session.excluded, args.exclude);
+const report = session ? null : parseRunSummary(args.summary);
+const playedBuild = session ? session.session.build : report.build;
 
 // A report is evidence about the build that was played. Check that this directory is it.
-const snapshotFile = path.join(path.resolve(dir), "SNAPSHOT.json");
-const snapshot = existsSync(snapshotFile) ? JSON.parse(readFileSync(snapshotFile, "utf8")) : null;
 let buildStatus;
-if (snapshot && snapshot.label === report.build) buildStatus = `verified (snapshot ${snapshot.label})`;
+const build = checkBuild(dir, playedBuild, "report");
+if (build.ok) buildStatus = build.status;
 else {
-  const why = snapshot
-    ? `this directory is snapshot "${snapshot.label}", but the report names build "${report.build}"`
-    : `this directory is not a snapshot, so it cannot be shown to be build "${report.build}"`;
   if (!args["allow-unverified-build"]) {
-    console.log(`BUILD NOT VERIFIED: ${why}.`);
+    console.log(`BUILD NOT VERIFIED: ${build.why}.`);
     console.log("Run this on the snapshot that was played, or pass --allow-unverified-build to fit anyway.");
     process.exit(1);
   }
-  buildStatus = `NOT VERIFIED (${why})`;
+  buildStatus = `NOT VERIFIED (${build.why})`;
 }
 
 const adapter = loadAdapter(dir);
+const fromZip = session ? zipReport(session) : null;
+const played = fromZip || report;
+
+// The runs of a review zip, as one report: a median or mean of each metric over the runs.
+function zipReport({ session: s, replays }) {
+  const why = replayable(s, adapter);
+  const runs = [];
+  for (const run of s.runs) {
+    if (run.summary) { runs.push({ run: run.run, from: "summary", ...parseRunSummary(run.summary) }); continue; }
+    const replay = replays.get(run.run);
+    if (why || !replay || replay.seed == null || !run.ended || run.abandoned) continue;
+    const res = replayRun(adapter, replay);
+    if (res.desync) { console.log(`SKIP run ${run.run}: replay DESYNCHRONISED at tick ${res.desync.tick}`); continue; }
+    const r = adapter.result(res.state);
+    const failures = r.failures || {};
+    runs.push({ run: run.run, from: "replay", progress: r.progress, score: r.score, timeS: replay.ticks * adapter.tickS, failures, totalFailures: Object.values(failures).reduce((a, b) => a + b, 0) });
+  }
+  if (!runs.length) { console.log("NOT IDENTIFIED: no run in the zip has a summary line or a usable replay."); process.exit(1); }
+  const med = (xs) => { const v = [...xs].sort((a, b) => a - b); return v.length % 2 ? v[v.length >> 1] : (v[v.length / 2 - 1] + v[v.length / 2]) / 2; };
+  const avg = (xs) => xs.reduce((a, b) => a + b, 0) / xs.length;
+  const failures = {};
+  for (const r of runs) for (const [k, n] of Object.entries(r.failures)) failures[k] = (failures[k] || 0) + n / runs.length;
+  console.log(`zip: ${runs.length} of ${s.runs.length} run(s) used (${runs.map((r) => `run ${r.run} from its ${r.from}`).join(", ")})`);
+  return {
+    build: s.build, progress: med(runs.map((r) => r.progress)), score: med(runs.map((r) => r.score)), timeS: +avg(runs.map((r) => r.timeS)).toFixed(1),
+    totalFailures: +avg(runs.map((r) => r.totalFailures)).toFixed(2), failures: Object.fromEntries(Object.entries(failures).map(([k, v]) => [k, +v.toFixed(2)])),
+  };
+}
 if (typeof adapter.skillPolicy !== "function") {
   console.error("adapter has no skillPolicy(t, seed); calibration needs a single skill axis");
   process.exit(2);
@@ -80,7 +110,7 @@ const spread = (m) => Math.max(...rows.map((r) => r[m])) - Math.min(...rows.map(
 const used = wanted.filter((m) => spread(m) > 0);
 const flat = wanted.filter((m) => spread(m) === 0);
 
-console.log(`report: build ${report.build}; ${wanted.map((m) => `${m} ${METRICS[m].rep(report)}`).join(", ")}`);
+console.log(`report: build ${played.build}; ${wanted.map((m) => `${m} ${METRICS[m].rep(played)}`).join(", ")}`);
 console.log(`build: ${buildStatus}`);
 console.log(["t   ", ...wanted.map((m) => m.padEnd(9)), "distance"].join("  "));
 
@@ -93,7 +123,7 @@ if (!used.length) {
 
 // Distance in units of each metric's spread across the axis, so the metrics weigh alike.
 for (const r of rows) {
-  r.distance = +used.reduce((d, m) => d + Math.abs(r[m] - METRICS[m].rep(report)) / spread(m), 0).toFixed(3);
+  r.distance = +used.reduce((d, m) => d + Math.abs(r[m] - METRICS[m].rep(played)) / spread(m), 0).toFixed(3);
 }
 const bestD = Math.min(...rows.map((r) => r.distance));
 // Candidates that fit about as well as the best are all reported: a tie is not a result.
@@ -114,13 +144,13 @@ if (!contiguous || fits.length > rows.length / 2) {
 }
 console.log(lo === hi ? `skill t=${lo.toFixed(2)} over ${seeds.length} seeds, using ${used.join(", ")}` : `skill t between ${lo.toFixed(2)} and ${hi.toFixed(2)} over ${seeds.length} seeds, using ${used.join(", ")}`);
 
-const beyond = (m, sign) => used.includes(m) && sign * (METRICS[m].rep(report) - rows[sign > 0 ? rows.length - 1 : 0][m]) > 0;
+const beyond = (m, sign) => used.includes(m) && sign * (METRICS[m].rep(played) - rows[sign > 0 ? rows.length - 1 : 0][m]) > 0;
 if (hi === 1 && (beyond("progress", 1) || beyond("score", 1))) {
   console.log("NOTE the reporter outperforms the strongest policy. Read that policy's failures: bad choices mean weak decisions, late or imprecise execution means limits that are too harsh.");
 } else if (lo === 0 && (beyond("progress", -1) || beyond("score", -1))) {
   console.log("NOTE the reporter is below the weakest modelled player. Add a weaker rung, or a limit the report's failures point to.");
 }
-if (Object.keys(report.failures).length) {
-  console.log(`NOTE the report's failures by cause (${Object.entries(report.failures).map(([c, n]) => `${c} ${n}`).join(", ")}) are not fitted; compare them with the policy's failures by hand.`);
+if (Object.keys(played.failures).length) {
+  console.log(`NOTE the report's failures by cause (${Object.entries(played.failures).map(([c, n]) => `${c} ${n}`).join(", ")}) are not fitted; compare them with the policy's failures by hand.`);
 }
 console.log("NOTE this places one player on one build. Re-run the ladder on the current build before changing difficulty.");

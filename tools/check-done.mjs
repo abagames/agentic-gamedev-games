@@ -9,10 +9,14 @@
 //
 // MISSING items fail the check. ABSENT items are optional evidence: say in the README why
 // each is absent, or produce it.
+//
+// The newest snapshot is the build handed over for play. It must carry the review kit, and at
+// level replay its rules must not call engine-dependent Math in step.
 import { existsSync, readdirSync, readFileSync, statSync } from "node:fs";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
-import { parseArgs } from "./lib/game.mjs";
+import { loadAdapter, parseArgs } from "./lib/game.mjs";
+import { engineMathInRules, kitStatus } from "./lib/review-kit.mjs";
 
 const args = parseArgs(process.argv.slice(2));
 const gameDir = args._[0];
@@ -63,7 +67,26 @@ if (existsSync(ladder)) {
 want(existsSync(path.join(dir, "evidence", "shots", "frames.json")), "evidence/shots/frames.json (tools/shots.mjs)");
 want(readme !== null && /RUN v1/.test(readme + (read("main.js") || "") + (read("core.js") || "")), "end-of-run summary line (RUN v1 ...)");
 
+// The newest snapshot, the build handed over for play, carries the review kit.
+let handed = null;
+const latest = [...snaps].sort().at(-1);
+if (latest) {
+  const snapDir = path.join(snapshots, latest);
+  const kit = kitStatus(snapDir);
+  need(kit.present, `the review kit in the newest snapshot ${latest} (tools/review-kit.mjs)${kit.problems.length ? `: ${kit.problems.join("; ")}` : ""}`);
+  if (kit.present) {
+    handed = `${latest}: ${kit.level || "(not declared)"}`;
+    if (kit.level === "replay" && existsSync(path.join(snapDir, "tests", "adapter.cjs"))) {
+      const used = Object.keys(engineMathInRules(loadAdapter(snapDir), { seeds: [1], maxTicks: 1800 }));
+      need(!used.length, `rules of ${latest} free of engine-dependent Math in step (they call ${used.map((f) => `Math.${f}`).join(", ")}; see tools/README.md, "Review kit")`);
+    }
+  }
+}
+
 console.log(`checked ${slug} as ${stage}: ${ok.length} present`);
+const kit = kitStatus(dir);
+console.log(`REVIEW  working copy: kit ${kit.present ? `PRESENT at level ${kit.level || "(not declared)"}${kit.current ? "" : "; the copy differs from tools/review/review.js"}` : "ABSENT"}`);
+if (handed) console.log(`REVIEW  newest snapshot: ${handed}`);
 for (const m of missing) console.log(`MISSING ${m}`);
 for (const a of absent) console.log(`ABSENT  ${a}`);
 console.log(missing.length ? `${missing.length} missing, ${absent.length} absent` : `nothing missing; ${absent.length} optional item(s) absent`);

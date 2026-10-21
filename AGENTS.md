@@ -16,7 +16,7 @@ Prefer depth from interactions over feature quantity.
 
 ## Design constraints
 
-When the user provides enough direction to guide the game concept, use that brief without drawing random tags. Draw tags only when the concept is left open, unless the user explicitly requests tags. For an open-ended assignment, run:
+When the user names a concrete idea, rule, or motif for the game, use that brief without drawing random tags. When the brief names only a style (an era, a genre's look, a platform feel, such as "1980s retro arcade"), or nothing at all, the concept is left open: draw tags and apply the style alongside them. Draw tags in any case when the user explicitly requests them. For an open-ended assignment, run:
 
 `node tools/pick-tags.mjs`
 
@@ -78,6 +78,8 @@ Inspect the skills available in the current environment during concepting, imple
 
 Use a skill when its documented trigger conditions match the task or an observed problem. Follow its `SKILL.md` as the canonical local procedure.
 
+A check that needs a reader who has seen neither the design nor the source (an outsider naming screen elements, `gating-intent-legibility`) may use a subagent given only the captured frames and the check's question; this is authorised by this file.
+
 Do not use skills merely because they are installed.
 
 Repository requirements, the user's brief, any selected tags, and the goal of this file take precedence over optional skill-specific genre defaults.
@@ -118,9 +120,9 @@ A slice that asks nothing of the player cannot be judged, so tune it as far as t
 
 Do not add a difficulty curve across many rounds, an ending, extends, a title sequence, or an attract loop unless the core experience depends on them.
 
-- Save the first playable build with `node tools/snapshot.mjs tmp/games/<slug> first-playable`, and the build handed over for play under its own label. A play report is evidence about the build that was played.
+- Save the first playable build with `node tools/snapshot.mjs tmp/games/<slug> first-playable`, and hand over a build for play as described in "Handing over for play" below.
 - In the completion report, list the structural weaknesses that remain. Do not rate how promising the slice is; that judgment is the user's.
-- State that difficulty is uncalibrated until a play report exists.
+- State that difficulty is uncalibrated until a play session exists.
 - Run `node tools/check-done.mjs tmp/games/<slug>` before the completion report.
 
 Then stop. Do not start stage 2 on your own.
@@ -134,7 +136,7 @@ Do not stop to ask which option to take. Choose, proceed, and record the options
 Finishing turns the slice into the full game the concept described. It is partly repair and partly building; the building steps below are done whether or not a check reported a finding. Work in this order:
 
 1. **Structure.** Refine with the `refining-game-prototypes` skill until the core decision holds up. Weaknesses in the core decision that the slice report listed are dealt with here, not carried forward.
-2. **Content.** Add the variation the full-game concept named when it was designed (see the README and the design record), one element at a time. Keep an element only if its effect can be seen on screen, it changes the best action, and it is not the ordinary game with pressure removed; otherwise remove it and record why. Stop when each stretch of a run introduces something new, or when the remaining candidates fail those tests. Do not invent elements the concept did not name unless the named ones are exhausted.
+2. **Content.** Add the variation the full-game concept named when it was designed (see the README and the design record), one element at a time. Keep an element only if its effect can be seen on screen, it changes the best action, and it is not the ordinary game with pressure removed; otherwise remove it and record why. Measure "changes the best action" by comparing a policy that takes the element into account with one that does not, on the round that introduces it (`tools/ladder.mjs --variant`, `tools/README.md`). Stop when each stretch of a run introduces something new, or when the remaining candidates fail those tests. Do not invent elements the concept did not name unless the named ones are exhausted. A proposal from the person counts as named; if it fails these tests, say which one and ask before dropping it.
 3. **Difficulty and progression.** With the content settled, set the run structure the concept calls for and nothing it does not: a defined end where a run is meant to end, at most one new element per round, and a lives and extend economy where the game has lives.
 4. **Presentation.** Do each of these as a deliberate pass, with the named skill, and record what was changed and what was considered and left out:
    - visuals, with `directing-game-visuals`: protagonist, danger, and reward tell apart at a glance; text and actors are large enough to carry the action;
@@ -146,14 +148,25 @@ Finishing turns the slice into the full game the concept described. It is partly
 
 Required in this stage:
 
-- Keep `REVISION_HISTORY.md` in the game directory (start it earlier if the slice was revised): the intent, each finding with its cause and evidence, what was tried and not adopted, and what was never measured.
-- Snapshot every build handed to the user for play.
-- State whether difficulty is calibrated against a play report, and on which build. Without a report, say it is uncalibrated.
+- Keep `REVISION_HISTORY.md` in the game directory (start it earlier if the slice was revised or played): the intent, each finding with its cause and evidence, what was tried and not adopted, and what was never measured.
+- State whether difficulty is calibrated, naming the build, the play session and the rung or bracket it rests on. Without a session, say it is uncalibrated.
 - Run `node tools/check-done.mjs tmp/games/<slug> --stage finished` before the completion report.
 
 ### Tools
 
-Apart from `snapshot.mjs` and `check-done.mjs`, everything in `tools/` is optional help, described in `tools/README.md`: a rules adapter for the bot ladder and its audit, scene capture, calibration, and the run-summary line. Use a tool when a question about the game needs the evidence it produces and that evidence is cheaper than the alternatives. A game that answers its questions another way, or whose rules cannot run outside a browser, uses none of them and needs no explanation beyond its test notes.
+Apart from `snapshot.mjs`, `check-done.mjs` and the review kit, everything in `tools/` is optional help, described in `tools/README.md`: a rules adapter for the bot ladder and its audit, scene capture, calibration, replay statistics, and the run-summary line. Use a tool when a question about the game needs the evidence it produces and that evidence is cheaper than the alternatives. A game whose rules cannot run outside a browser still carries the review kit, at the `no-adapter` or `non-deterministic` level, and needs none of the replay-based tools. `ladder.mjs --compare` compares results only; whether recorded replays stay valid is decided by state hashes.
+
+### Handing over for play
+
+Every build handed over for play, at either stage, is snapshotted and carries the review kit at the highest level its rules allow (`node tools/review-kit.mjs`; `tools/README.md`, "Review kit"). At the `replay` level, the rules compute sin, cos, atan2, hypot, pow, exp and other engine-dependent Math functions deterministically, as that section describes. The person plays, downloads the recorded runs with one key, and comments in the chat; ask any questions about the build there.
+
+When a review zip arrives:
+
+- Store it under `tmp/playtests/<slug>/<session>/`. Play data stays under `tmp/` unless the person asks.
+- Run `tools/replay.mjs` on the snapshot it names. A desynchronised replay is reported and not used as evidence. A zip of a build already played repeats the earlier runs; pass the earlier zips with `--exclude`.
+- Read the runs together with the person's comments, on the build that was played, with `refining-game-prototypes` (play input) and `evaluating-gameplay-balance` (calibration). Place the person between the existing policies with `tools/replay-stats.mjs`. Fit a rung to how they play (check it with `--fit`, carry it into the current `tests/adapter.cjs` named for the person and session) only when a difficulty decision depends on where they sit and the existing policies do not bracket them closely enough; stop after three attempts and record the fit and where it is off. For questions the figures do not answer, use `tools/replay-probe.mjs`.
+- Record the session in `REVISION_HISTORY.md` once it exists: the build, the findings, where the person sits among the policies (and any fit's `k/n` and where it is off), and what was done with each proposal.
+- At the slice stage, act only on findings about the core decision, within the slice's tuning limits, and record proposals as held for finishing. Then stop.
 
 ## Tune
 
@@ -180,20 +193,7 @@ A useful tuning change should alter meaningful player behavior, decisions, or ac
 
 ### Simulated players
 
-Simulated players must be limited in execution as well as information. Precise bots overestimate human players; hand-written bots with weak decisions underestimate them. Both have happened here, so do not assume a direction.
-
-Use a ladder of policies and state which one each conclusion rests on:
-
-- strong or oracle policies to detect exploits and degenerate strategies, and as the primary reference for how much pressure the game applies,
-- a human-limited policy to check difficulty, timers, and pacing against a modelled person.
-
-The baseline is a comparison against simple policies (idle, repeated input, nearest-target greed) plus the sanity checks below. Add more only when a finding calls for it: a stronger policy, such as look-ahead over copied states, when the strong policy is shown to fail in ways a person would avoid; a weaker rung when a play report falls below every policy; policies that stall or only survive when the game has a goal that could be bypassed.
-
-A human-limited policy should model, where relevant, reaction latency to new danger, timing error, attention lapses (not checking secondary threats), position-reading error, decay of stale information, and re-orientation time after the frame of reference changes (teleport, camera cut, moved pivot). It should not be able to repeat accurate actions faster than a person could.
-
-A claim that a strategy is dominant or balanced should hold across the ladder, or be reported as skill-dependent.
-
-When the user's hands-on play contradicts bot results, treat the play report as the stronger evidence and correct the human-limited model toward it. Compare the report with the policies on the build that was played. Fit it numerically only when a difficulty decision depends on the result.
+Build, limit, sanity-check and calibrate simulated players as `evaluating-gameplay-balance` describes, and state which policy each conclusion rests on. This repository fixes which: exploits and the slice's pressure check rest on the strong or oracle policy; calibration statements rest on where a play session places the person among the policies, or on their rung where one was fitted. The pressure check holds although the skill sets difficulty only from human-limited runs: it asks whether the slice has pressure at all, not how hard it is. Where a run has a defined end, the strong or oracle policy may clear it every time; the end must be reachable by the human-limited policy or the person's bracket, and top play is pressed by score. A game may set difficulty on a person's rung instead, and records that choice and its reason in `REVISION_HISTORY.md`. A play session outranks simulated results in either direction.
 
 After structural tuning, perform an explicit play-feel pass.
 
@@ -233,7 +233,7 @@ When relevant, test mechanic conformance, degenerate strategies, balance, legibi
 
 A smoke test alone is not evidence that the intended gameplay works.
 
-Before trusting simulated-player results, sanity-check the simulated players themselves: human-plausible input rate, plausible causes of failure, and no artifact of their own model (such as stale predictions converging on the player) driving the outcome.
+Before trusting simulated-player results, run the sanity checks of `evaluating-gameplay-balance` on the simulated players themselves.
 
 After tuning, rerun checks affected by the changes. A change meant to touch only drawing or sound must leave seeded simulated results identical, where the game has them.
 
@@ -296,7 +296,8 @@ Report:
 - the main structural tuning performed,
 - the main play-feel tuning performed,
 - for a slice, the structural weaknesses already visible,
+- for a build handed over for play: the play link with `?review=1` to its snapshot directory (as `review-kit.mjs <snapshot> --check` prints it), the download key (press it between runs; the zip holds every run of that build), and two cautions: play one build in one browser, and download before closing the tab if the page says it is not saved,
 - validation performed and its results,
-- whether difficulty is calibrated against a play report, and on which build,
+- whether difficulty is calibrated, naming the build, the session and the rung or bracket,
 - any untested behavior,
 - any remaining blocker.

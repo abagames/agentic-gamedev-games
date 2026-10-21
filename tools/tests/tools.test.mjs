@@ -106,6 +106,23 @@ test("ladder writes a report, and --compare detects identical and changed rules"
   assert.match(none.stdout, /nothing was checked/);
 });
 
+test("ladder runs on an adapter's variant and will not compare across variants", () => {
+  const out = path.join(tmp, "variant.json"), plain = path.join(tmp, "plain-v.json");
+  const v = run("ladder.mjs", fixture, "--seeds", "3", "--variant", "fragile", "--out", out);
+  assert.equal(v.status, 0, v.stdout + v.stderr);
+  assert.match(v.stdout, /variant: fragile/);
+  assert.equal(JSON.parse(readFileSync(out, "utf8")).run_config.variant, "fragile");
+  assert.equal(run("ladder.mjs", fixture, "--seeds", "3", "--out", plain).status, 0);
+  const fragileTime = JSON.parse(readFileSync(out, "utf8")).policies.idle.mean_elapsed_s, plainTime = JSON.parse(readFileSync(plain, "utf8")).policies.idle.mean_elapsed_s;
+  assert.ok(fragileTime < plainTime, "one life ends the idle run sooner");
+  const cross = run("ladder.mjs", fixture, "--seeds", "3", "--compare", out, "--out", path.join(tmp, "x.json"));
+  assert.equal(cross.status, 1);
+  assert.match(cross.stdout, /was run on variant fragile, this on \(none\); nothing was compared/);
+  const unknown = run("ladder.mjs", fixture, "--variant", "nope");
+  assert.equal(unknown.status, 2);
+  assert.match(unknown.stderr, /unknown variant "nope" \(have: late, fragile\)/);
+});
+
 test("ladder never compares a report with itself", () => {
   // Baseline at the default output path, then a rule change, then --compare on that same path.
   const game = path.join(tmp, "self-compare-game");
@@ -234,6 +251,7 @@ test("check-done asks less of a slice than of a finished game", () => {
 
   // Wording and package.json are not checked: AGENTS.md does not prescribe how a game is tested.
   writeFileSync(path.join(game, "README.md"), "# 題名\n## 操作\n");
+  run("review-kit.mjs", game);
   run("snapshot.mjs", game, "first-playable", "--root", root);
   const slice = run("check-done.mjs", game, "--snapshots", root);
   assert.equal(slice.status, 0, slice.stdout);
