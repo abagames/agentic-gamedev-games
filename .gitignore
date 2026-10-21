@@ -58,3 +58,6 @@ docs/zig-saber/evidence/
 # OVERTURN test outputs (development evidence lives in tmp/games/overturn)
 docs/overturn/evidence/
 docs/overturn/reports/
+
+# PILEUP test outputs (development evidence lives in tmp/games/pileup)
+docs/pileup/evidence/

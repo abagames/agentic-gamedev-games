@@ -1,0 +1,2157 @@
+{
+ "version": 1,
+ "audioMode": "active",
+ "hardwareProfile": {
+  "id": "namco-wsg-inspired",
+  "fidelity": "era-inspired",
+  "voiceLimit": 4,
+  "primitives": [
+   "wave32x4",
+   "lfsr-noise"
+  ]
+ },
+ "budgets": {
+  "sfxMaxDurationSeconds": 0.6,
+  "jingleMaxDurationSeconds": 1.6,
+  "maxStepsPerProgram": 24,
+  "bgmLoopMaxDurationSeconds": 32,
+  "bgmLoopMaxTailSeconds": 0
+ },
+ "programs": {
+  "crash": {
+   "id": "crash",
+   "kind": "sfx",
+   "steps": [
+    {
+     "offset": 0,
+     "duration": 0.32,
+     "voice": "noise"
+    },
+    {
+     "offset": 0.08,
+     "duration": 0.1,
+     "voice": "lead"
+    },
+    {
+     "offset": 0.15,
+     "duration": 0.12,
+     "voice": "counter"
+    }
+   ]
+  },
+  "scent": {
+   "id": "scent",
+   "kind": "sfx",
+   "steps": [
+    {
+     "offset": 0,
+     "duration": 0.04,
+     "voice": "lead"
+    },
+    {
+     "offset": 0.05,
+     "duration": 0.04,
+     "voice": "lead"
+    }
+   ]
+  },
+  "siren": {
+   "id": "siren",
+   "kind": "sfx",
+   "steps": [
+    {
+     "offset": 0,
+     "duration": 0.1,
+     "voice": "lead"
+    },
+    {
+     "offset": 0.11,
+     "duration": 0.1,
+     "voice": "lead"
+    },
+    {
+     "offset": 0.22,
+     "duration": 0.1,
+     "voice": "lead"
+    },
+    {
+     "offset": 0.33,
+     "duration": 0.1,
+     "voice": "lead"
+    }
+   ]
+  },
+  "dent": {
+   "id": "dent",
+   "kind": "sfx",
+   "steps": [
+    {
+     "offset": 0,
+     "duration": 0.08,
+     "voice": "lead"
+    },
+    {
+     "offset": 0,
+     "duration": 0.06,
+     "voice": "noise"
+    }
+   ]
+  },
+  "go": {
+   "id": "go",
+   "kind": "sfx",
+   "steps": [
+    {
+     "offset": 0,
+     "duration": 0.09,
+     "voice": "lead"
+    },
+    {
+     "offset": 0.1,
+     "duration": 0.16,
+     "voice": "lead"
+    }
+   ]
+  },
+  "tick": {
+   "id": "tick",
+   "kind": "sfx",
+   "steps": [
+    {
+     "offset": 0,
+     "duration": 0.03,
+     "voice": "lead"
+    }
+   ]
+  },
+  "tally": {
+   "id": "tally",
+   "kind": "sfx",
+   "steps": [
+    {
+     "offset": 0,
+     "duration": 0.06,
+     "voice": "lead"
+    }
+   ]
+  },
+  "exit": {
+   "id": "exit",
+   "kind": "jingle",
+   "steps": [
+    {
+     "offset": 0,
+     "duration": 0.08,
+     "voice": "lead"
+    },
+    {
+     "offset": 0.08,
+     "duration": 0.08,
+     "voice": "lead"
+    },
+    {
+     "offset": 0.16,
+     "duration": 0.08,
+     "voice": "lead"
+    },
+    {
+     "offset": 0.24,
+     "duration": 0.14,
+     "voice": "lead"
+    }
+   ]
+  },
+  "extend": {
+   "id": "extend",
+   "kind": "jingle",
+   "steps": [
+    {
+     "offset": 0,
+     "duration": 0.06,
+     "voice": "lead"
+    },
+    {
+     "offset": 0.06,
+     "duration": 0.06,
+     "voice": "lead"
+    },
+    {
+     "offset": 0.12,
+     "duration": 0.06,
+     "voice": "lead"
+    },
+    {
+     "offset": 0.18,
+     "duration": 0.06,
+     "voice": "lead"
+    },
+    {
+     "offset": 0.24,
+     "duration": 0.06,
+     "voice": "lead"
+    },
+    {
+     "offset": 0.3,
+     "duration": 0.1,
+     "voice": "lead"
+    }
+   ]
+  },
+  "clear": {
+   "id": "clear",
+   "kind": "jingle",
+   "steps": [
+    {
+     "offset": 0,
+     "duration": 0.1,
+     "voice": "lead"
+    },
+    {
+     "offset": 0.1,
+     "duration": 0.1,
+     "voice": "lead"
+    },
+    {
+     "offset": 0.2,
+     "duration": 0.1,
+     "voice": "lead"
+    },
+    {
+     "offset": 0.30000000000000004,
+     "duration": 0.1,
+     "voice": "lead"
+    },
+    {
+     "offset": 0.4,
+     "duration": 0.1,
+     "voice": "lead"
+    },
+    {
+     "offset": 0.5,
+     "duration": 0.16,
+     "voice": "lead"
+    },
+    {
+     "offset": 0,
+     "duration": 0.3,
+     "voice": "bass"
+    },
+    {
+     "offset": 0.3,
+     "duration": 0.3,
+     "voice": "bass"
+    }
+   ]
+  },
+  "start": {
+   "id": "start",
+   "kind": "jingle",
+   "steps": [
+    {
+     "offset": 0,
+     "duration": 0.07,
+     "voice": "lead"
+    },
+    {
+     "offset": 0.07,
+     "duration": 0.07,
+     "voice": "lead"
+    },
+    {
+     "offset": 0.14,
+     "duration": 0.07,
+     "voice": "lead"
+    },
+    {
+     "offset": 0.21000000000000002,
+     "duration": 0.07,
+     "voice": "lead"
+    },
+    {
+     "offset": 0.28,
+     "duration": 0.07,
+     "voice": "lead"
+    },
+    {
+     "offset": 0.35000000000000003,
+     "duration": 0.1,
+     "voice": "lead"
+    }
+   ]
+  },
+  "death": {
+   "id": "death",
+   "kind": "jingle",
+   "steps": [
+    {
+     "offset": 0,
+     "duration": 0.9,
+     "voice": "noise"
+    },
+    {
+     "offset": 0,
+     "duration": 0.8,
+     "voice": "lead"
+    }
+   ]
+  },
+  "gameover": {
+   "id": "gameover",
+   "kind": "jingle",
+   "steps": [
+    {
+     "offset": 0,
+     "duration": 0.22,
+     "voice": "lead"
+    },
+    {
+     "offset": 0.22,
+     "duration": 0.22,
+     "voice": "lead"
+    },
+    {
+     "offset": 0.44,
+     "duration": 0.22,
+     "voice": "lead"
+    },
+    {
+     "offset": 0.66,
+     "duration": 0.22,
+     "voice": "lead"
+    },
+    {
+     "offset": 0.88,
+     "duration": 0.2,
+     "voice": "lead"
+    },
+    {
+     "offset": 0,
+     "duration": 1.08,
+     "voice": "bass"
+    }
+   ]
+  },
+  "won": {
+   "id": "won",
+   "kind": "jingle",
+   "steps": [
+    {
+     "offset": 0,
+     "duration": 0.12,
+     "voice": "lead"
+    },
+    {
+     "offset": 0.12,
+     "duration": 0.12,
+     "voice": "lead"
+    },
+    {
+     "offset": 0.24,
+     "duration": 0.12,
+     "voice": "lead"
+    },
+    {
+     "offset": 0.36,
+     "duration": 0.12,
+     "voice": "lead"
+    },
+    {
+     "offset": 0.48,
+     "duration": 0.12,
+     "voice": "lead"
+    },
+    {
+     "offset": 0.6,
+     "duration": 0.12,
+     "voice": "lead"
+    },
+    {
+     "offset": 0.72,
+     "duration": 0.3,
+     "voice": "lead"
+    },
+    {
+     "offset": 0,
+     "duration": 0.5,
+     "voice": "bass"
+    },
+    {
+     "offset": 0.6,
+     "duration": 0.6,
+     "voice": "bass"
+    }
+   ]
+  }
+ },
+ "aliases": {
+  "crash": "crash",
+  "scent": "scent",
+  "siren": "siren",
+  "dent": "dent",
+  "go": "go",
+  "tick": "tick",
+  "tally": "tally",
+  "exit": "exit",
+  "extend": "extend",
+  "clear": "clear",
+  "start": "start",
+  "death": "death",
+  "gameover": "gameover",
+  "won": "won",
+  "music:chase": {
+   "kind": "cue",
+   "id": "chase"
+  },
+  "music:getaway": {
+   "kind": "cue",
+   "id": "getaway"
+  },
+  "music:alert": {
+   "kind": "cue",
+   "id": "alert"
+  }
+ },
+ "events": [
+  {
+   "name": "crash",
+   "classification": "sfx",
+   "priority": 85
+  },
+  {
+   "name": "scent",
+   "classification": "sfx",
+   "priority": 80
+  },
+  {
+   "name": "siren",
+   "classification": "sfx",
+   "priority": 90
+  },
+  {
+   "name": "dent",
+   "classification": "sfx",
+   "priority": 84
+  },
+  {
+   "name": "go",
+   "classification": "sfx",
+   "priority": 60
+  },
+  {
+   "name": "tick",
+   "classification": "sfx",
+   "priority": 40
+  },
+  {
+   "name": "tally",
+   "classification": "sfx",
+   "priority": 50
+  },
+  {
+   "name": "exit",
+   "classification": "jingle",
+   "priority": 62
+  },
+  {
+   "name": "extend",
+   "classification": "jingle",
+   "priority": 58
+  },
+  {
+   "name": "clear",
+   "classification": "jingle",
+   "priority": 61
+  },
+  {
+   "name": "start",
+   "classification": "jingle",
+   "priority": 55
+  },
+  {
+   "name": "death",
+   "classification": "jingle",
+   "priority": 98
+  },
+  {
+   "name": "gameover",
+   "classification": "jingle",
+   "priority": 55
+  },
+  {
+   "name": "won",
+   "classification": "jingle",
+   "priority": 55
+  },
+  {
+   "name": "music:chase",
+   "classification": "bgm",
+   "priority": 20
+  },
+  {
+   "name": "music:getaway",
+   "classification": "bgm",
+   "priority": 20
+  },
+  {
+   "name": "music:alert",
+   "classification": "bgm",
+   "priority": 20
+  },
+  {
+   "name": "tow",
+   "classification": "none",
+   "priority": 0
+  },
+  {
+   "name": "spawn",
+   "classification": "none",
+   "priority": 0
+  },
+  {
+   "name": "turn",
+   "classification": "none",
+   "priority": 0
+  }
+ ],
+ "bgmCues": {
+  "chase": {
+   "id": "chase",
+   "durationSeconds": 7.2727272727272725,
+   "loopStartSeconds": 0,
+   "loopEndSeconds": 7.2727272727272725,
+   "steps": [
+    {
+     "offset": 0,
+     "duration": 0.10454545454545455,
+     "voice": "bass"
+    },
+    {
+     "offset": 0.22727272727272727,
+     "duration": 0.10454545454545455,
+     "voice": "bass"
+    },
+    {
+     "offset": 0.45454545454545453,
+     "duration": 0.10454545454545455,
+     "voice": "bass"
+    },
+    {
+     "offset": 0.6818181818181818,
+     "duration": 0.10454545454545455,
+     "voice": "bass"
+    },
+    {
+     "offset": 0.9090909090909091,
+     "duration": 0.10454545454545455,
+     "voice": "bass"
+    },
+    {
+     "offset": 1.1363636363636362,
+     "duration": 0.10454545454545455,
+     "voice": "bass"
+    },
+    {
+     "offset": 1.3636363636363635,
+     "duration": 0.10454545454545455,
+     "voice": "bass"
+    },
+    {
+     "offset": 1.5909090909090908,
+     "duration": 0.10454545454545455,
+     "voice": "bass"
+    },
+    {
+     "offset": 1.8181818181818181,
+     "duration": 0.10454545454545455,
+     "voice": "bass"
+    },
+    {
+     "offset": 2.0454545454545454,
+     "duration": 0.10454545454545455,
+     "voice": "bass"
+    },
+    {
+     "offset": 2.2727272727272725,
+     "duration": 0.10454545454545455,
+     "voice": "bass"
+    },
+    {
+     "offset": 2.5,
+     "duration": 0.10454545454545455,
+     "voice": "bass"
+    },
+    {
+     "offset": 2.727272727272727,
+     "duration": 0.10454545454545455,
+     "voice": "bass"
+    },
+    {
+     "offset": 2.9545454545454546,
+     "duration": 0.10454545454545455,
+     "voice": "bass"
+    },
+    {
+     "offset": 3.1818181818181817,
+     "duration": 0.10454545454545455,
+     "voice": "bass"
+    },
+    {
+     "offset": 3.409090909090909,
+     "duration": 0.10454545454545455,
+     "voice": "bass"
+    },
+    {
+     "offset": 3.6363636363636362,
+     "duration": 0.10454545454545455,
+     "voice": "bass"
+    },
+    {
+     "offset": 3.8636363636363633,
+     "duration": 0.10454545454545455,
+     "voice": "bass"
+    },
+    {
+     "offset": 4.090909090909091,
+     "duration": 0.10454545454545455,
+     "voice": "bass"
+    },
+    {
+     "offset": 4.318181818181818,
+     "duration": 0.10454545454545455,
+     "voice": "bass"
+    },
+    {
+     "offset": 4.545454545454545,
+     "duration": 0.10454545454545455,
+     "voice": "bass"
+    },
+    {
+     "offset": 4.7727272727272725,
+     "duration": 0.10454545454545455,
+     "voice": "bass"
+    },
+    {
+     "offset": 5,
+     "duration": 0.10454545454545455,
+     "voice": "bass"
+    },
+    {
+     "offset": 5.2272727272727275,
+     "duration": 0.10454545454545455,
+     "voice": "bass"
+    },
+    {
+     "offset": 5.454545454545454,
+     "duration": 0.10454545454545455,
+     "voice": "bass"
+    },
+    {
+     "offset": 5.681818181818182,
+     "duration": 0.10454545454545455,
+     "voice": "bass"
+    },
+    {
+     "offset": 5.909090909090909,
+     "duration": 0.10454545454545455,
+     "voice": "bass"
+    },
+    {
+     "offset": 6.136363636363636,
+     "duration": 0.10454545454545455,
+     "voice": "bass"
+    },
+    {
+     "offset": 6.363636363636363,
+     "duration": 0.10454545454545455,
+     "voice": "bass"
+    },
+    {
+     "offset": 6.590909090909091,
+     "duration": 0.10454545454545455,
+     "voice": "bass"
+    },
+    {
+     "offset": 6.818181818181818,
+     "duration": 0.10454545454545455,
+     "voice": "bass"
+    },
+    {
+     "offset": 6.931818181818182,
+     "duration": 0.10454545454545455,
+     "voice": "bass"
+    },
+    {
+     "offset": 7.045454545454545,
+     "duration": 0.10454545454545455,
+     "voice": "bass"
+    },
+    {
+     "offset": 0,
+     "duration": 0.2090909090909091,
+     "voice": "lead"
+    },
+    {
+     "offset": 0.3409090909090909,
+     "duration": 0.10454545454545455,
+     "voice": "lead"
+    },
+    {
+     "offset": 0.45454545454545453,
+     "duration": 0.2090909090909091,
+     "voice": "lead"
+    },
+    {
+     "offset": 0.6818181818181818,
+     "duration": 0.2090909090909091,
+     "voice": "lead"
+    },
+    {
+     "offset": 0.9090909090909091,
+     "duration": 0.3136363636363636,
+     "voice": "lead"
+    },
+    {
+     "offset": 1.5909090909090908,
+     "duration": 0.10454545454545455,
+     "voice": "lead"
+    },
+    {
+     "offset": 1.7045454545454546,
+     "duration": 0.10454545454545455,
+     "voice": "lead"
+    },
+    {
+     "offset": 1.8181818181818181,
+     "duration": 0.2090909090909091,
+     "voice": "lead"
+    },
+    {
+     "offset": 2.159090909090909,
+     "duration": 0.10454545454545455,
+     "voice": "lead"
+    },
+    {
+     "offset": 2.2727272727272725,
+     "duration": 0.2090909090909091,
+     "voice": "lead"
+    },
+    {
+     "offset": 2.5,
+     "duration": 0.2090909090909091,
+     "voice": "lead"
+    },
+    {
+     "offset": 2.727272727272727,
+     "duration": 0.2090909090909091,
+     "voice": "lead"
+    },
+    {
+     "offset": 2.9545454545454546,
+     "duration": 0.2090909090909091,
+     "voice": "lead"
+    },
+    {
+     "offset": 3.1818181818181817,
+     "duration": 0.2090909090909091,
+     "voice": "lead"
+    },
+    {
+     "offset": 3.6363636363636362,
+     "duration": 0.2090909090909091,
+     "voice": "lead"
+    },
+    {
+     "offset": 3.977272727272727,
+     "duration": 0.10454545454545455,
+     "voice": "lead"
+    },
+    {
+     "offset": 4.090909090909091,
+     "duration": 0.2090909090909091,
+     "voice": "lead"
+    },
+    {
+     "offset": 4.318181818181818,
+     "duration": 0.2090909090909091,
+     "voice": "lead"
+    },
+    {
+     "offset": 4.545454545454545,
+     "duration": 0.3136363636363636,
+     "voice": "lead"
+    },
+    {
+     "offset": 5,
+     "duration": 0.2090909090909091,
+     "voice": "lead"
+    },
+    {
+     "offset": 5.2272727272727275,
+     "duration": 0.2090909090909091,
+     "voice": "lead"
+    },
+    {
+     "offset": 5.454545454545454,
+     "duration": 0.2090909090909091,
+     "voice": "lead"
+    },
+    {
+     "offset": 5.681818181818182,
+     "duration": 0.2090909090909091,
+     "voice": "lead"
+    },
+    {
+     "offset": 5.909090909090909,
+     "duration": 0.2090909090909091,
+     "voice": "lead"
+    },
+    {
+     "offset": 6.136363636363636,
+     "duration": 0.2090909090909091,
+     "voice": "lead"
+    },
+    {
+     "offset": 6.363636363636363,
+     "duration": 0.2090909090909091,
+     "voice": "lead"
+    },
+    {
+     "offset": 6.590909090909091,
+     "duration": 0.4181818181818182,
+     "voice": "lead"
+    },
+    {
+     "offset": 0,
+     "duration": 0.10454545454545455,
+     "voice": "counter"
+    },
+    {
+     "offset": 0.11363636363636363,
+     "duration": 0.10454545454545455,
+     "voice": "counter"
+    },
+    {
+     "offset": 0.22727272727272727,
+     "duration": 0.10454545454545455,
+     "voice": "counter"
+    },
+    {
+     "offset": 0.3409090909090909,
+     "duration": 0.10454545454545455,
+     "voice": "counter"
+    },
+    {
+     "offset": 0.45454545454545453,
+     "duration": 0.10454545454545455,
+     "voice": "counter"
+    },
+    {
+     "offset": 0.5681818181818181,
+     "duration": 0.10454545454545455,
+     "voice": "counter"
+    },
+    {
+     "offset": 0.6818181818181818,
+     "duration": 0.10454545454545455,
+     "voice": "counter"
+    },
+    {
+     "offset": 0.7954545454545454,
+     "duration": 0.10454545454545455,
+     "voice": "counter"
+    },
+    {
+     "offset": 0.9090909090909091,
+     "duration": 0.10454545454545455,
+     "voice": "counter"
+    },
+    {
+     "offset": 1.0227272727272727,
+     "duration": 0.10454545454545455,
+     "voice": "counter"
+    },
+    {
+     "offset": 1.1363636363636362,
+     "duration": 0.10454545454545455,
+     "voice": "counter"
+    },
+    {
+     "offset": 1.25,
+     "duration": 0.10454545454545455,
+     "voice": "counter"
+    },
+    {
+     "offset": 1.3636363636363635,
+     "duration": 0.10454545454545455,
+     "voice": "counter"
+    },
+    {
+     "offset": 1.4772727272727273,
+     "duration": 0.10454545454545455,
+     "voice": "counter"
+    },
+    {
+     "offset": 1.5909090909090908,
+     "duration": 0.10454545454545455,
+     "voice": "counter"
+    },
+    {
+     "offset": 1.7045454545454546,
+     "duration": 0.10454545454545455,
+     "voice": "counter"
+    },
+    {
+     "offset": 1.8181818181818181,
+     "duration": 0.10454545454545455,
+     "voice": "counter"
+    },
+    {
+     "offset": 1.9318181818181817,
+     "duration": 0.10454545454545455,
+     "voice": "counter"
+    },
+    {
+     "offset": 2.0454545454545454,
+     "duration": 0.10454545454545455,
+     "voice": "counter"
+    },
+    {
+     "offset": 2.159090909090909,
+     "duration": 0.10454545454545455,
+     "voice": "counter"
+    },
+    {
+     "offset": 2.2727272727272725,
+     "duration": 0.10454545454545455,
+     "voice": "counter"
+    },
+    {
+     "offset": 2.3863636363636362,
+     "duration": 0.10454545454545455,
+     "voice": "counter"
+    },
+    {
+     "offset": 2.5,
+     "duration": 0.10454545454545455,
+     "voice": "counter"
+    },
+    {
+     "offset": 2.6136363636363638,
+     "duration": 0.10454545454545455,
+     "voice": "counter"
+    },
+    {
+     "offset": 2.727272727272727,
+     "duration": 0.10454545454545455,
+     "voice": "counter"
+    },
+    {
+     "offset": 2.840909090909091,
+     "duration": 0.10454545454545455,
+     "voice": "counter"
+    },
+    {
+     "offset": 2.9545454545454546,
+     "duration": 0.10454545454545455,
+     "voice": "counter"
+    },
+    {
+     "offset": 3.068181818181818,
+     "duration": 0.10454545454545455,
+     "voice": "counter"
+    },
+    {
+     "offset": 3.1818181818181817,
+     "duration": 0.10454545454545455,
+     "voice": "counter"
+    },
+    {
+     "offset": 3.2954545454545454,
+     "duration": 0.10454545454545455,
+     "voice": "counter"
+    },
+    {
+     "offset": 3.409090909090909,
+     "duration": 0.10454545454545455,
+     "voice": "counter"
+    },
+    {
+     "offset": 3.5227272727272725,
+     "duration": 0.10454545454545455,
+     "voice": "counter"
+    },
+    {
+     "offset": 3.6363636363636362,
+     "duration": 0.10454545454545455,
+     "voice": "counter"
+    },
+    {
+     "offset": 3.75,
+     "duration": 0.10454545454545455,
+     "voice": "counter"
+    },
+    {
+     "offset": 3.8636363636363633,
+     "duration": 0.10454545454545455,
+     "voice": "counter"
+    },
+    {
+     "offset": 3.977272727272727,
+     "duration": 0.10454545454545455,
+     "voice": "counter"
+    },
+    {
+     "offset": 4.090909090909091,
+     "duration": 0.10454545454545455,
+     "voice": "counter"
+    },
+    {
+     "offset": 4.204545454545454,
+     "duration": 0.10454545454545455,
+     "voice": "counter"
+    },
+    {
+     "offset": 4.318181818181818,
+     "duration": 0.10454545454545455,
+     "voice": "counter"
+    },
+    {
+     "offset": 4.431818181818182,
+     "duration": 0.10454545454545455,
+     "voice": "counter"
+    },
+    {
+     "offset": 4.545454545454545,
+     "duration": 0.10454545454545455,
+     "voice": "counter"
+    },
+    {
+     "offset": 4.659090909090909,
+     "duration": 0.10454545454545455,
+     "voice": "counter"
+    },
+    {
+     "offset": 4.7727272727272725,
+     "duration": 0.10454545454545455,
+     "voice": "counter"
+    },
+    {
+     "offset": 4.886363636363636,
+     "duration": 0.10454545454545455,
+     "voice": "counter"
+    },
+    {
+     "offset": 5,
+     "duration": 0.10454545454545455,
+     "voice": "counter"
+    },
+    {
+     "offset": 5.113636363636363,
+     "duration": 0.10454545454545455,
+     "voice": "counter"
+    },
+    {
+     "offset": 5.2272727272727275,
+     "duration": 0.10454545454545455,
+     "voice": "counter"
+    },
+    {
+     "offset": 5.340909090909091,
+     "duration": 0.10454545454545455,
+     "voice": "counter"
+    },
+    {
+     "offset": 5.454545454545454,
+     "duration": 0.10454545454545455,
+     "voice": "counter"
+    },
+    {
+     "offset": 5.568181818181818,
+     "duration": 0.10454545454545455,
+     "voice": "counter"
+    },
+    {
+     "offset": 5.681818181818182,
+     "duration": 0.10454545454545455,
+     "voice": "counter"
+    },
+    {
+     "offset": 5.795454545454545,
+     "duration": 0.10454545454545455,
+     "voice": "counter"
+    },
+    {
+     "offset": 5.909090909090909,
+     "duration": 0.10454545454545455,
+     "voice": "counter"
+    },
+    {
+     "offset": 6.0227272727272725,
+     "duration": 0.10454545454545455,
+     "voice": "counter"
+    },
+    {
+     "offset": 6.136363636363636,
+     "duration": 0.10454545454545455,
+     "voice": "counter"
+    },
+    {
+     "offset": 6.25,
+     "duration": 0.10454545454545455,
+     "voice": "counter"
+    },
+    {
+     "offset": 6.363636363636363,
+     "duration": 0.10454545454545455,
+     "voice": "counter"
+    },
+    {
+     "offset": 6.477272727272727,
+     "duration": 0.10454545454545455,
+     "voice": "counter"
+    },
+    {
+     "offset": 6.590909090909091,
+     "duration": 0.10454545454545455,
+     "voice": "counter"
+    },
+    {
+     "offset": 6.704545454545454,
+     "duration": 0.10454545454545455,
+     "voice": "counter"
+    },
+    {
+     "offset": 6.818181818181818,
+     "duration": 0.10454545454545455,
+     "voice": "counter"
+    }
+   ]
+  },
+  "getaway": {
+   "id": "getaway",
+   "durationSeconds": 7.2727272727272725,
+   "loopStartSeconds": 0,
+   "loopEndSeconds": 7.2727272727272725,
+   "steps": [
+    {
+     "offset": 0,
+     "duration": 0.10454545454545455,
+     "voice": "bass"
+    },
+    {
+     "offset": 0.22727272727272727,
+     "duration": 0.10454545454545455,
+     "voice": "bass"
+    },
+    {
+     "offset": 0.45454545454545453,
+     "duration": 0.10454545454545455,
+     "voice": "bass"
+    },
+    {
+     "offset": 0.6818181818181818,
+     "duration": 0.10454545454545455,
+     "voice": "bass"
+    },
+    {
+     "offset": 0.9090909090909091,
+     "duration": 0.10454545454545455,
+     "voice": "bass"
+    },
+    {
+     "offset": 1.1363636363636362,
+     "duration": 0.10454545454545455,
+     "voice": "bass"
+    },
+    {
+     "offset": 1.3636363636363635,
+     "duration": 0.10454545454545455,
+     "voice": "bass"
+    },
+    {
+     "offset": 1.5909090909090908,
+     "duration": 0.10454545454545455,
+     "voice": "bass"
+    },
+    {
+     "offset": 1.8181818181818181,
+     "duration": 0.10454545454545455,
+     "voice": "bass"
+    },
+    {
+     "offset": 2.0454545454545454,
+     "duration": 0.10454545454545455,
+     "voice": "bass"
+    },
+    {
+     "offset": 2.2727272727272725,
+     "duration": 0.10454545454545455,
+     "voice": "bass"
+    },
+    {
+     "offset": 2.5,
+     "duration": 0.10454545454545455,
+     "voice": "bass"
+    },
+    {
+     "offset": 2.727272727272727,
+     "duration": 0.10454545454545455,
+     "voice": "bass"
+    },
+    {
+     "offset": 2.9545454545454546,
+     "duration": 0.10454545454545455,
+     "voice": "bass"
+    },
+    {
+     "offset": 3.1818181818181817,
+     "duration": 0.10454545454545455,
+     "voice": "bass"
+    },
+    {
+     "offset": 3.409090909090909,
+     "duration": 0.10454545454545455,
+     "voice": "bass"
+    },
+    {
+     "offset": 3.6363636363636362,
+     "duration": 0.10454545454545455,
+     "voice": "bass"
+    },
+    {
+     "offset": 3.8636363636363633,
+     "duration": 0.10454545454545455,
+     "voice": "bass"
+    },
+    {
+     "offset": 4.090909090909091,
+     "duration": 0.10454545454545455,
+     "voice": "bass"
+    },
+    {
+     "offset": 4.318181818181818,
+     "duration": 0.10454545454545455,
+     "voice": "bass"
+    },
+    {
+     "offset": 4.545454545454545,
+     "duration": 0.10454545454545455,
+     "voice": "bass"
+    },
+    {
+     "offset": 4.7727272727272725,
+     "duration": 0.10454545454545455,
+     "voice": "bass"
+    },
+    {
+     "offset": 5,
+     "duration": 0.10454545454545455,
+     "voice": "bass"
+    },
+    {
+     "offset": 5.2272727272727275,
+     "duration": 0.10454545454545455,
+     "voice": "bass"
+    },
+    {
+     "offset": 5.454545454545454,
+     "duration": 0.10454545454545455,
+     "voice": "bass"
+    },
+    {
+     "offset": 5.681818181818182,
+     "duration": 0.10454545454545455,
+     "voice": "bass"
+    },
+    {
+     "offset": 5.909090909090909,
+     "duration": 0.10454545454545455,
+     "voice": "bass"
+    },
+    {
+     "offset": 6.136363636363636,
+     "duration": 0.10454545454545455,
+     "voice": "bass"
+    },
+    {
+     "offset": 6.363636363636363,
+     "duration": 0.10454545454545455,
+     "voice": "bass"
+    },
+    {
+     "offset": 6.477272727272727,
+     "duration": 0.10454545454545455,
+     "voice": "bass"
+    },
+    {
+     "offset": 6.590909090909091,
+     "duration": 0.10454545454545455,
+     "voice": "bass"
+    },
+    {
+     "offset": 6.818181818181818,
+     "duration": 0.10454545454545455,
+     "voice": "bass"
+    },
+    {
+     "offset": 7.045454545454545,
+     "duration": 0.10454545454545455,
+     "voice": "bass"
+    },
+    {
+     "offset": 0,
+     "duration": 0.2090909090909091,
+     "voice": "lead"
+    },
+    {
+     "offset": 0.22727272727272727,
+     "duration": 0.2090909090909091,
+     "voice": "lead"
+    },
+    {
+     "offset": 0.45454545454545453,
+     "duration": 0.10454545454545455,
+     "voice": "lead"
+    },
+    {
+     "offset": 0.5681818181818181,
+     "duration": 0.10454545454545455,
+     "voice": "lead"
+    },
+    {
+     "offset": 0.6818181818181818,
+     "duration": 0.10454545454545455,
+     "voice": "lead"
+    },
+    {
+     "offset": 0.7954545454545454,
+     "duration": 0.10454545454545455,
+     "voice": "lead"
+    },
+    {
+     "offset": 0.9090909090909091,
+     "duration": 0.4181818181818182,
+     "voice": "lead"
+    },
+    {
+     "offset": 1.3636363636363635,
+     "duration": 0.2090909090909091,
+     "voice": "lead"
+    },
+    {
+     "offset": 1.5909090909090908,
+     "duration": 0.2090909090909091,
+     "voice": "lead"
+    },
+    {
+     "offset": 1.8181818181818181,
+     "duration": 0.2090909090909091,
+     "voice": "lead"
+    },
+    {
+     "offset": 2.0454545454545454,
+     "duration": 0.2090909090909091,
+     "voice": "lead"
+    },
+    {
+     "offset": 2.2727272727272725,
+     "duration": 0.2090909090909091,
+     "voice": "lead"
+    },
+    {
+     "offset": 2.5,
+     "duration": 0.2090909090909091,
+     "voice": "lead"
+    },
+    {
+     "offset": 2.727272727272727,
+     "duration": 0.2090909090909091,
+     "voice": "lead"
+    },
+    {
+     "offset": 2.9545454545454546,
+     "duration": 0.2090909090909091,
+     "voice": "lead"
+    },
+    {
+     "offset": 3.1818181818181817,
+     "duration": 0.2090909090909091,
+     "voice": "lead"
+    },
+    {
+     "offset": 3.409090909090909,
+     "duration": 0.2090909090909091,
+     "voice": "lead"
+    },
+    {
+     "offset": 3.8636363636363633,
+     "duration": 0.2090909090909091,
+     "voice": "lead"
+    },
+    {
+     "offset": 4.090909090909091,
+     "duration": 0.2090909090909091,
+     "voice": "lead"
+    },
+    {
+     "offset": 4.318181818181818,
+     "duration": 0.10454545454545455,
+     "voice": "lead"
+    },
+    {
+     "offset": 4.431818181818182,
+     "duration": 0.10454545454545455,
+     "voice": "lead"
+    },
+    {
+     "offset": 4.545454545454545,
+     "duration": 0.10454545454545455,
+     "voice": "lead"
+    },
+    {
+     "offset": 4.659090909090909,
+     "duration": 0.10454545454545455,
+     "voice": "lead"
+    },
+    {
+     "offset": 4.7727272727272725,
+     "duration": 0.4181818181818182,
+     "voice": "lead"
+    },
+    {
+     "offset": 5.2272727272727275,
+     "duration": 0.2090909090909091,
+     "voice": "lead"
+    },
+    {
+     "offset": 5.454545454545454,
+     "duration": 0.2090909090909091,
+     "voice": "lead"
+    },
+    {
+     "offset": 5.681818181818182,
+     "duration": 0.2090909090909091,
+     "voice": "lead"
+    },
+    {
+     "offset": 5.909090909090909,
+     "duration": 0.2090909090909091,
+     "voice": "lead"
+    },
+    {
+     "offset": 6.136363636363636,
+     "duration": 0.2090909090909091,
+     "voice": "lead"
+    },
+    {
+     "offset": 6.363636363636363,
+     "duration": 0.2090909090909091,
+     "voice": "lead"
+    },
+    {
+     "offset": 6.590909090909091,
+     "duration": 0.2090909090909091,
+     "voice": "lead"
+    },
+    {
+     "offset": 6.818181818181818,
+     "duration": 0.4181818181818182,
+     "voice": "lead"
+    },
+    {
+     "offset": 0,
+     "duration": 0.10454545454545455,
+     "voice": "counter"
+    },
+    {
+     "offset": 0.11363636363636363,
+     "duration": 0.10454545454545455,
+     "voice": "counter"
+    },
+    {
+     "offset": 0.22727272727272727,
+     "duration": 0.10454545454545455,
+     "voice": "counter"
+    },
+    {
+     "offset": 0.3409090909090909,
+     "duration": 0.10454545454545455,
+     "voice": "counter"
+    },
+    {
+     "offset": 0.45454545454545453,
+     "duration": 0.10454545454545455,
+     "voice": "counter"
+    },
+    {
+     "offset": 0.5681818181818181,
+     "duration": 0.10454545454545455,
+     "voice": "counter"
+    },
+    {
+     "offset": 0.6818181818181818,
+     "duration": 0.10454545454545455,
+     "voice": "counter"
+    },
+    {
+     "offset": 0.7954545454545454,
+     "duration": 0.10454545454545455,
+     "voice": "counter"
+    },
+    {
+     "offset": 0.9090909090909091,
+     "duration": 0.10454545454545455,
+     "voice": "counter"
+    },
+    {
+     "offset": 1.0227272727272727,
+     "duration": 0.10454545454545455,
+     "voice": "counter"
+    },
+    {
+     "offset": 1.1363636363636362,
+     "duration": 0.10454545454545455,
+     "voice": "counter"
+    },
+    {
+     "offset": 1.25,
+     "duration": 0.10454545454545455,
+     "voice": "counter"
+    },
+    {
+     "offset": 1.3636363636363635,
+     "duration": 0.10454545454545455,
+     "voice": "counter"
+    },
+    {
+     "offset": 1.4772727272727273,
+     "duration": 0.10454545454545455,
+     "voice": "counter"
+    },
+    {
+     "offset": 1.5909090909090908,
+     "duration": 0.10454545454545455,
+     "voice": "counter"
+    },
+    {
+     "offset": 1.7045454545454546,
+     "duration": 0.10454545454545455,
+     "voice": "counter"
+    },
+    {
+     "offset": 1.8181818181818181,
+     "duration": 0.10454545454545455,
+     "voice": "counter"
+    },
+    {
+     "offset": 1.9318181818181817,
+     "duration": 0.10454545454545455,
+     "voice": "counter"
+    },
+    {
+     "offset": 2.0454545454545454,
+     "duration": 0.10454545454545455,
+     "voice": "counter"
+    },
+    {
+     "offset": 2.159090909090909,
+     "duration": 0.10454545454545455,
+     "voice": "counter"
+    },
+    {
+     "offset": 2.2727272727272725,
+     "duration": 0.10454545454545455,
+     "voice": "counter"
+    },
+    {
+     "offset": 2.3863636363636362,
+     "duration": 0.10454545454545455,
+     "voice": "counter"
+    },
+    {
+     "offset": 2.5,
+     "duration": 0.10454545454545455,
+     "voice": "counter"
+    },
+    {
+     "offset": 2.6136363636363638,
+     "duration": 0.10454545454545455,
+     "voice": "counter"
+    },
+    {
+     "offset": 2.727272727272727,
+     "duration": 0.10454545454545455,
+     "voice": "counter"
+    },
+    {
+     "offset": 2.840909090909091,
+     "duration": 0.10454545454545455,
+     "voice": "counter"
+    },
+    {
+     "offset": 2.9545454545454546,
+     "duration": 0.10454545454545455,
+     "voice": "counter"
+    },
+    {
+     "offset": 3.068181818181818,
+     "duration": 0.10454545454545455,
+     "voice": "counter"
+    },
+    {
+     "offset": 3.1818181818181817,
+     "duration": 0.10454545454545455,
+     "voice": "counter"
+    },
+    {
+     "offset": 3.2954545454545454,
+     "duration": 0.10454545454545455,
+     "voice": "counter"
+    },
+    {
+     "offset": 3.409090909090909,
+     "duration": 0.10454545454545455,
+     "voice": "counter"
+    },
+    {
+     "offset": 3.5227272727272725,
+     "duration": 0.10454545454545455,
+     "voice": "counter"
+    },
+    {
+     "offset": 3.6363636363636362,
+     "duration": 0.10454545454545455,
+     "voice": "counter"
+    },
+    {
+     "offset": 3.75,
+     "duration": 0.10454545454545455,
+     "voice": "counter"
+    },
+    {
+     "offset": 3.8636363636363633,
+     "duration": 0.10454545454545455,
+     "voice": "counter"
+    },
+    {
+     "offset": 3.977272727272727,
+     "duration": 0.10454545454545455,
+     "voice": "counter"
+    },
+    {
+     "offset": 4.090909090909091,
+     "duration": 0.10454545454545455,
+     "voice": "counter"
+    },
+    {
+     "offset": 4.204545454545454,
+     "duration": 0.10454545454545455,
+     "voice": "counter"
+    },
+    {
+     "offset": 4.318181818181818,
+     "duration": 0.10454545454545455,
+     "voice": "counter"
+    },
+    {
+     "offset": 4.431818181818182,
+     "duration": 0.10454545454545455,
+     "voice": "counter"
+    },
+    {
+     "offset": 4.545454545454545,
+     "duration": 0.10454545454545455,
+     "voice": "counter"
+    },
+    {
+     "offset": 4.659090909090909,
+     "duration": 0.10454545454545455,
+     "voice": "counter"
+    },
+    {
+     "offset": 4.7727272727272725,
+     "duration": 0.10454545454545455,
+     "voice": "counter"
+    },
+    {
+     "offset": 4.886363636363636,
+     "duration": 0.10454545454545455,
+     "voice": "counter"
+    },
+    {
+     "offset": 5,
+     "duration": 0.10454545454545455,
+     "voice": "counter"
+    },
+    {
+     "offset": 5.113636363636363,
+     "duration": 0.10454545454545455,
+     "voice": "counter"
+    },
+    {
+     "offset": 5.2272727272727275,
+     "duration": 0.10454545454545455,
+     "voice": "counter"
+    },
+    {
+     "offset": 5.340909090909091,
+     "duration": 0.10454545454545455,
+     "voice": "counter"
+    },
+    {
+     "offset": 5.454545454545454,
+     "duration": 0.10454545454545455,
+     "voice": "counter"
+    },
+    {
+     "offset": 5.568181818181818,
+     "duration": 0.10454545454545455,
+     "voice": "counter"
+    },
+    {
+     "offset": 5.681818181818182,
+     "duration": 0.10454545454545455,
+     "voice": "counter"
+    },
+    {
+     "offset": 5.795454545454545,
+     "duration": 0.10454545454545455,
+     "voice": "counter"
+    },
+    {
+     "offset": 5.909090909090909,
+     "duration": 0.10454545454545455,
+     "voice": "counter"
+    },
+    {
+     "offset": 6.0227272727272725,
+     "duration": 0.10454545454545455,
+     "voice": "counter"
+    },
+    {
+     "offset": 6.136363636363636,
+     "duration": 0.10454545454545455,
+     "voice": "counter"
+    },
+    {
+     "offset": 6.25,
+     "duration": 0.10454545454545455,
+     "voice": "counter"
+    },
+    {
+     "offset": 6.363636363636363,
+     "duration": 0.10454545454545455,
+     "voice": "counter"
+    },
+    {
+     "offset": 6.477272727272727,
+     "duration": 0.10454545454545455,
+     "voice": "counter"
+    },
+    {
+     "offset": 6.590909090909091,
+     "duration": 0.10454545454545455,
+     "voice": "counter"
+    },
+    {
+     "offset": 6.704545454545454,
+     "duration": 0.10454545454545455,
+     "voice": "counter"
+    },
+    {
+     "offset": 6.818181818181818,
+     "duration": 0.10454545454545455,
+     "voice": "counter"
+    }
+   ]
+  },
+  "alert": {
+   "id": "alert",
+   "durationSeconds": 7.2727272727272725,
+   "loopStartSeconds": 0,
+   "loopEndSeconds": 7.2727272727272725,
+   "steps": [
+    {
+     "offset": 0,
+     "duration": 0.2090909090909091,
+     "voice": "bass"
+    },
+    {
+     "offset": 0.22727272727272727,
+     "duration": 0.10454545454545455,
+     "voice": "bass"
+    },
+    {
+     "offset": 0.45454545454545453,
+     "duration": 0.2090909090909091,
+     "voice": "bass"
+    },
+    {
+     "offset": 0.6818181818181818,
+     "duration": 0.10454545454545455,
+     "voice": "bass"
+    },
+    {
+     "offset": 0.9090909090909091,
+     "duration": 0.2090909090909091,
+     "voice": "bass"
+    },
+    {
+     "offset": 1.1363636363636362,
+     "duration": 0.10454545454545455,
+     "voice": "bass"
+    },
+    {
+     "offset": 1.3636363636363635,
+     "duration": 0.2090909090909091,
+     "voice": "bass"
+    },
+    {
+     "offset": 1.5909090909090908,
+     "duration": 0.10454545454545455,
+     "voice": "bass"
+    },
+    {
+     "offset": 1.8181818181818181,
+     "duration": 0.2090909090909091,
+     "voice": "bass"
+    },
+    {
+     "offset": 2.0454545454545454,
+     "duration": 0.10454545454545455,
+     "voice": "bass"
+    },
+    {
+     "offset": 2.2727272727272725,
+     "duration": 0.2090909090909091,
+     "voice": "bass"
+    },
+    {
+     "offset": 2.5,
+     "duration": 0.10454545454545455,
+     "voice": "bass"
+    },
+    {
+     "offset": 2.727272727272727,
+     "duration": 0.2090909090909091,
+     "voice": "bass"
+    },
+    {
+     "offset": 2.9545454545454546,
+     "duration": 0.10454545454545455,
+     "voice": "bass"
+    },
+    {
+     "offset": 3.1818181818181817,
+     "duration": 0.2090909090909091,
+     "voice": "bass"
+    },
+    {
+     "offset": 3.409090909090909,
+     "duration": 0.10454545454545455,
+     "voice": "bass"
+    },
+    {
+     "offset": 3.6363636363636362,
+     "duration": 0.2090909090909091,
+     "voice": "bass"
+    },
+    {
+     "offset": 3.8636363636363633,
+     "duration": 0.10454545454545455,
+     "voice": "bass"
+    },
+    {
+     "offset": 4.090909090909091,
+     "duration": 0.2090909090909091,
+     "voice": "bass"
+    },
+    {
+     "offset": 4.318181818181818,
+     "duration": 0.10454545454545455,
+     "voice": "bass"
+    },
+    {
+     "offset": 4.545454545454545,
+     "duration": 0.2090909090909091,
+     "voice": "bass"
+    },
+    {
+     "offset": 4.7727272727272725,
+     "duration": 0.10454545454545455,
+     "voice": "bass"
+    },
+    {
+     "offset": 5,
+     "duration": 0.2090909090909091,
+     "voice": "bass"
+    },
+    {
+     "offset": 5.2272727272727275,
+     "duration": 0.10454545454545455,
+     "voice": "bass"
+    },
+    {
+     "offset": 5.454545454545454,
+     "duration": 0.2090909090909091,
+     "voice": "bass"
+    },
+    {
+     "offset": 5.681818181818182,
+     "duration": 0.10454545454545455,
+     "voice": "bass"
+    },
+    {
+     "offset": 5.909090909090909,
+     "duration": 0.2090909090909091,
+     "voice": "bass"
+    },
+    {
+     "offset": 6.136363636363636,
+     "duration": 0.10454545454545455,
+     "voice": "bass"
+    },
+    {
+     "offset": 6.363636363636363,
+     "duration": 0.3136363636363636,
+     "voice": "bass"
+    },
+    {
+     "offset": 6.818181818181818,
+     "duration": 0.10454545454545455,
+     "voice": "bass"
+    },
+    {
+     "offset": 7.045454545454545,
+     "duration": 0.10454545454545455,
+     "voice": "bass"
+    },
+    {
+     "offset": 0,
+     "duration": 0.4181818181818182,
+     "voice": "lead"
+    },
+    {
+     "offset": 0.6818181818181818,
+     "duration": 0.2090909090909091,
+     "voice": "lead"
+    },
+    {
+     "offset": 0.9090909090909091,
+     "duration": 0.4181818181818182,
+     "voice": "lead"
+    },
+    {
+     "offset": 1.8181818181818181,
+     "duration": 0.4181818181818182,
+     "voice": "lead"
+    },
+    {
+     "offset": 2.5,
+     "duration": 0.2090909090909091,
+     "voice": "lead"
+    },
+    {
+     "offset": 2.727272727272727,
+     "duration": 0.2090909090909091,
+     "voice": "lead"
+    },
+    {
+     "offset": 2.9545454545454546,
+     "duration": 0.2090909090909091,
+     "voice": "lead"
+    },
+    {
+     "offset": 3.6363636363636362,
+     "duration": 0.4181818181818182,
+     "voice": "lead"
+    },
+    {
+     "offset": 4.318181818181818,
+     "duration": 0.2090909090909091,
+     "voice": "lead"
+    },
+    {
+     "offset": 4.545454545454545,
+     "duration": 0.4181818181818182,
+     "voice": "lead"
+    },
+    {
+     "offset": 5.2272727272727275,
+     "duration": 0.2090909090909091,
+     "voice": "lead"
+    },
+    {
+     "offset": 5.454545454545454,
+     "duration": 0.4181818181818182,
+     "voice": "lead"
+    },
+    {
+     "offset": 5.909090909090909,
+     "duration": 0.4181818181818182,
+     "voice": "lead"
+    },
+    {
+     "offset": 6.363636363636363,
+     "duration": 0.4181818181818182,
+     "voice": "lead"
+    },
+    {
+     "offset": 0,
+     "duration": 0.10454545454545455,
+     "voice": "counter"
+    },
+    {
+     "offset": 0.22727272727272727,
+     "duration": 0.10454545454545455,
+     "voice": "counter"
+    },
+    {
+     "offset": 0.45454545454545453,
+     "duration": 0.10454545454545455,
+     "voice": "counter"
+    },
+    {
+     "offset": 0.6818181818181818,
+     "duration": 0.10454545454545455,
+     "voice": "counter"
+    },
+    {
+     "offset": 0.9090909090909091,
+     "duration": 0.10454545454545455,
+     "voice": "counter"
+    },
+    {
+     "offset": 1.1363636363636362,
+     "duration": 0.10454545454545455,
+     "voice": "counter"
+    },
+    {
+     "offset": 1.3636363636363635,
+     "duration": 0.10454545454545455,
+     "voice": "counter"
+    },
+    {
+     "offset": 1.5909090909090908,
+     "duration": 0.10454545454545455,
+     "voice": "counter"
+    },
+    {
+     "offset": 1.8181818181818181,
+     "duration": 0.10454545454545455,
+     "voice": "counter"
+    },
+    {
+     "offset": 2.0454545454545454,
+     "duration": 0.10454545454545455,
+     "voice": "counter"
+    },
+    {
+     "offset": 2.2727272727272725,
+     "duration": 0.10454545454545455,
+     "voice": "counter"
+    },
+    {
+     "offset": 2.5,
+     "duration": 0.10454545454545455,
+     "voice": "counter"
+    },
+    {
+     "offset": 2.727272727272727,
+     "duration": 0.10454545454545455,
+     "voice": "counter"
+    },
+    {
+     "offset": 2.9545454545454546,
+     "duration": 0.10454545454545455,
+     "voice": "counter"
+    },
+    {
+     "offset": 3.1818181818181817,
+     "duration": 0.10454545454545455,
+     "voice": "counter"
+    },
+    {
+     "offset": 3.409090909090909,
+     "duration": 0.10454545454545455,
+     "voice": "counter"
+    },
+    {
+     "offset": 3.6363636363636362,
+     "duration": 0.10454545454545455,
+     "voice": "counter"
+    },
+    {
+     "offset": 3.8636363636363633,
+     "duration": 0.10454545454545455,
+     "voice": "counter"
+    },
+    {
+     "offset": 4.090909090909091,
+     "duration": 0.10454545454545455,
+     "voice": "counter"
+    },
+    {
+     "offset": 4.318181818181818,
+     "duration": 0.10454545454545455,
+     "voice": "counter"
+    },
+    {
+     "offset": 4.545454545454545,
+     "duration": 0.10454545454545455,
+     "voice": "counter"
+    },
+    {
+     "offset": 4.7727272727272725,
+     "duration": 0.10454545454545455,
+     "voice": "counter"
+    },
+    {
+     "offset": 5,
+     "duration": 0.10454545454545455,
+     "voice": "counter"
+    },
+    {
+     "offset": 5.2272727272727275,
+     "duration": 0.10454545454545455,
+     "voice": "counter"
+    },
+    {
+     "offset": 5.454545454545454,
+     "duration": 0.10454545454545455,
+     "voice": "counter"
+    },
+    {
+     "offset": 5.681818181818182,
+     "duration": 0.10454545454545455,
+     "voice": "counter"
+    },
+    {
+     "offset": 5.909090909090909,
+     "duration": 0.10454545454545455,
+     "voice": "counter"
+    },
+    {
+     "offset": 6.136363636363636,
+     "duration": 0.10454545454545455,
+     "voice": "counter"
+    },
+    {
+     "offset": 6.363636363636363,
+     "duration": 0.10454545454545455,
+     "voice": "counter"
+    },
+    {
+     "offset": 6.590909090909091,
+     "duration": 0.10454545454545455,
+     "voice": "counter"
+    },
+    {
+     "offset": 6.818181818181818,
+     "duration": 0.10454545454545455,
+     "voice": "counter"
+    }
+   ]
+  }
+ }
+}

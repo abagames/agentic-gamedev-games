@@ -1,0 +1,243 @@
+{
+  "version": "1.0",
+  "game": "pileup",
+  "run_config": {
+    "seed_set": [
+      1,
+      2,
+      3,
+      4,
+      5,
+      6,
+      7,
+      8
+    ],
+    "tick_s": 0.016666666666666666,
+    "max_s": 600,
+    "variant": null
+  },
+  "intent": {
+    "core": "pileup",
+    "primaryThreat": "patrol",
+    "threats": [
+      "patrol",
+      "wreck"
+    ]
+  },
+  "policies": {
+    "idle": {
+      "profile": "baseline",
+      "role": null,
+      "runs": 8,
+      "mean_score": 0,
+      "median_score": 0,
+      "mean_progress": 0,
+      "median_progress": 0,
+      "success_rate": 0,
+      "timed_out_rate": 0,
+      "mean_elapsed_s": 24.1,
+      "failures_per_run": {
+        "caught": 3
+      },
+      "usage_analysis": {
+        "action_share": {},
+        "score_share": {},
+        "region_time_share": {},
+        "threats": {
+          "patrol": {
+            "fires_per_min": 14.97,
+            "hits_per_min": 7.48
+          }
+        },
+        "longest_no_primary_threat_s": 2.5
+      },
+      "fingerprints": {
+        "1": "723de1db9602",
+        "2": "723de1db9602",
+        "3": "723de1db9602",
+        "4": "723de1db9602",
+        "5": "723de1db9602",
+        "6": "723de1db9602",
+        "7": "723de1db9602",
+        "8": "723de1db9602"
+      }
+    },
+    "flee": {
+      "profile": "precise",
+      "role": "survive_only",
+      "runs": 8,
+      "mean_score": 1112.5,
+      "median_score": 950,
+      "mean_progress": 0.96,
+      "median_progress": 0.99,
+      "success_rate": 0,
+      "timed_out_rate": 0,
+      "mean_elapsed_s": 46.2,
+      "failures_per_run": {
+        "caught": 3
+      },
+      "usage_analysis": {
+        "action_share": {},
+        "score_share": {
+          "headon": 0.404,
+          "pileup": 0.596
+        },
+        "region_time_share": {},
+        "threats": {
+          "patrol": {
+            "fires_per_min": 17.53,
+            "hits_per_min": 3.9
+          },
+          "wreck": {
+            "fires_per_min": 1.95,
+            "hits_per_min": 0
+          }
+        },
+        "longest_no_primary_threat_s": 2.5
+      },
+      "fingerprints": {
+        "1": "4d16700bd822",
+        "2": "842e86dfab9e",
+        "3": "b36d197fb0a7",
+        "4": "945c71336148",
+        "5": "ea6d92e1f2d6",
+        "6": "b1cf85722e8c",
+        "7": "79d4172962aa",
+        "8": "665ae7c3a309"
+      }
+    },
+    "human": {
+      "profile": "human-limited",
+      "role": null,
+      "runs": 8,
+      "mean_score": 2906.3,
+      "median_score": 2250,
+      "mean_progress": 1.49,
+      "median_progress": 1,
+      "success_rate": 0,
+      "timed_out_rate": 0,
+      "mean_elapsed_s": 84.8,
+      "failures_per_run": {
+        "caught": 3.75
+      },
+      "usage_analysis": {
+        "action_share": {},
+        "score_share": {
+          "headon": 0.508,
+          "pileup": 0.492
+        },
+        "region_time_share": {},
+        "threats": {
+          "patrol": {
+            "fires_per_min": 16.54,
+            "hits_per_min": 2.65
+          },
+          "wreck": {
+            "fires_per_min": 2.12,
+            "hits_per_min": 0
+          }
+        },
+        "longest_no_primary_threat_s": 2.5
+      },
+      "fingerprints": {
+        "1": "08f77135bd87",
+        "2": "1dc08cdfa0e2",
+        "3": "1e31df3ccb5e",
+        "4": "92fcbe63d6d4",
+        "5": "c6ac49b0b86d",
+        "6": "e323ed700e24",
+        "7": "178fc9d6197c",
+        "8": "8411175a9453"
+      }
+    },
+    "skilled": {
+      "profile": "human-limited",
+      "role": null,
+      "runs": 8,
+      "mean_score": 50237.5,
+      "median_score": 60550,
+      "mean_progress": 4.75,
+      "median_progress": 4.495,
+      "success_rate": 0.625,
+      "timed_out_rate": 0,
+      "mean_elapsed_s": 280.4,
+      "failures_per_run": {
+        "caught": 5.89,
+        "wreck": 0.14
+      },
+      "usage_analysis": {
+        "action_share": {},
+        "score_share": {
+          "headon": 0.322,
+          "pileup": 0.678
+        },
+        "region_time_share": {},
+        "threats": {
+          "patrol": {
+            "fires_per_min": 17.68,
+            "hits_per_min": 1.26
+          },
+          "wreck": {
+            "fires_per_min": 3.85,
+            "hits_per_min": 0.03
+          }
+        },
+        "longest_no_primary_threat_s": 2.667
+      },
+      "fingerprints": {
+        "1": "d221958da83a",
+        "2": "38b94c122f32",
+        "3": "4d3a1f0d7c0e",
+        "4": "87b254c94260",
+        "5": "e6b3db5a555c",
+        "6": "635460faae02",
+        "7": "3c382acff095",
+        "8": "795127c14801"
+      }
+    },
+    "strong": {
+      "profile": "oracle",
+      "role": null,
+      "runs": 8,
+      "mean_score": 86481.3,
+      "median_score": 85275,
+      "mean_progress": 5.38,
+      "median_progress": 5,
+      "success_rate": 1,
+      "timed_out_rate": 0,
+      "mean_elapsed_s": 317.5,
+      "failures_per_run": {
+        "caught": 3.39
+      },
+      "usage_analysis": {
+        "action_share": {},
+        "score_share": {
+          "headon": 0.301,
+          "pileup": 0.699
+        },
+        "region_time_share": {},
+        "threats": {
+          "patrol": {
+            "fires_per_min": 18.12,
+            "hits_per_min": 0.64
+          },
+          "wreck": {
+            "fires_per_min": 4.18,
+            "hits_per_min": 0
+          }
+        },
+        "longest_no_primary_threat_s": 2.5
+      },
+      "fingerprints": {
+        "1": "526dd091babc",
+        "2": "b2484f8ea198",
+        "3": "12b66acdb594",
+        "4": "df9d579216f9",
+        "5": "7cf265a0788c",
+        "6": "7b05c52cce81",
+        "7": "f4956bbf80ff",
+        "8": "e10894948bf5"
+      }
+    }
+  }
+}
